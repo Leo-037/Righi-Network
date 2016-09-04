@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load urlify %}
+
+{% block head_title %}
+{{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block content %}
+<div class="row">
+	<div class='col-sm-6 col-sm-offset-3'>
+	<h1>Conferma eliminazione</h1>
+		<form method="POST" action="."> {% csrf_token %}
+			<p> Sicuro di voler eliminare: "{{ object.content }}"?</p>
+			<input type="Submit" value="Conferma" class="btn btn-warning">
+			<a href="{{ object.get_absolute_url }}" class="btn btn-default">Annulla</a>
+		</form>
+	</div>
+	<hr/>
+</div>
+{% endblock content %}

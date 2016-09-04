@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}
+Assemblee
+{% endblock head_title %}
+
+{% block head_extra %}
+<!--<link href="{% static 'css/assemblee.css' %}" rel="stylesheet" type="text/css">-->
+{% endblock head_extra %}
+
+{% block content %}
+<div class="row">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+        <li class="breadcrumb-item active">Assemblee</li>
+    </ol>
+</div>
+<div class="row">
+    <h1 class="text-center text-primary">Assemblee</h1>
+    <hr>
+    {% if assemblee_correnti|length > 0 %}
+        {% for assemblea in assemblee_correnti %}
+
+                <div class="col-md-12">
+                    <div class="well">
+                        <a href="/assemblee/{{ assemblea.id }}">
+                            <h2 class="text-primary">{{ assemblea.data_assemblea }}</a>
+                        <small>{{ assemblea.sede }}</small>
+                        </h2>
+                        <p class="lead text-muted"></p>
+                    </div>
+                </div>
+        {% endfor %}
+    {% else %}
+        <h2 class="text-center text-warning"><i>Non ci sono assemblee</i></h2>
+    {% endif %}
+</div>
+
+<div class="row">
+{% if assemblee_vecchie|length > 0 %}
+    <h1 class="text-center text-primary">Assemblee terminate</h1>
+    <hr>
+    {% for assemblea in assemblee_vecchie %}
+
+            <div class="col-md-12">
+                <div class="well">
+                    <a href="/assemblee/{{ assemblea.id }}">
+                        <h2 class="text-primary">{{ assemblea.data_assemblea }}</a>
+                    <small>{{ assemblea.sede }}</small>
+                    </h2>
+                    <p class="lead text-muted"></p>
+                </div>
+            </div>
+    {% endfor %}
+{% endif %}
+</div>
+
+<div class="row">
+{% if user.studente.is_rappr_istituto or user.is_superuser %}
+<h1 class="text-center text-primary">Prossime assemblee</h1>
+    <hr>
+    {% if assemblee_future|length > 0 %}
+        {% for assemblea in assemblee_future %}
+            <div class="col-md-12">
+                <div class="well">
+                    <a href="/assemblee/{{ assemblea.id }}">
+                        <h2 class="text-primary">{{ assemblea.data_assemblea }}</a>
+                    <small>{{ assemblea.sede }}</small>
+                    </h2>
+                    <p class="lead text-muted"></p>
+                </div>
+            </div>
+
+        {% endfor %}
+    {% else %}
+        <h2 class="text-center text-warning"><i>Nessuna nuova assemblea in programma</i></h2>
+    {% endif %}
+{% endif %}
+</div>
+{% endblock content %}

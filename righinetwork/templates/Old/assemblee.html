@@ -1,0 +1,28 @@
+﻿{% extends "base.html" %}
+
+{% block head_title %}
+Assemblee
+{% endblock head_title %}
+
+
+{% block content %}
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+  <li class="breadcrumb-item active">Assemblee</li>
+</ol>
+
+<div class="col-sm-6 col-sm-offset-3">
+	<h1>Assemblee</h1>
+	<h3>
+		<ul>
+			{% for assemblea in assemblee %}
+				<li>
+					<a href="/assemblee/{{ assemblea.id }}">
+						{{ assemblea.id }} - {{ assemblea.data_assemblea }}
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</h3>
+</div>
+{% endblock content %}

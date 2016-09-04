@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+{% block head_extra %}
+<!--<link href="{% static 'css/dettagli_turno.css' %}" rel="stylesheet" type="text/css">-->
+{% endblock head_extra %}
+
+{% block content %}
+<div class="row">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+		<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+		<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ turno.assemblea.id }}">{{ turno.assemblea.data_assemblea }}</a></li>
+		<li class="breadcrumb-item active">{{ turno.ora }}</li>
+	</ol>
+</div>
+
+<div class="row">
+    <h1 class="text-center text-primary">Gruppi delle {{ turno.ora }}</h1>
+    <hr>
+    {% for gruppo in gruppi %}
+        <div class="col-md-12 text-left">
+            <div class="well">
+                <h2 class="text-primary">{{ gruppo.titolo }}<small>{{ gruppo.aula }}</small></h2>
+                <p class="lead text-info">Tenuto da {{ gruppo.host }}</p>
+                <p class="lead text-muted">{{ gruppo.descrizione }}</p>
+                {% if mostra_iscrizione == False %}
+                    <p class="lead text-info">{% if gruppo.iscritti == 0 %}0 / {{ gruppo.iscritti_massimi }} iscritti
+                {% else %}
+                    <a href="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">
+                        {{ gruppo.iscritti }} / {{ gruppo.iscritti_massimi }} iscritti</a>
+                    {% endif %}</p>
+                    {% if gruppo_iscritto == gruppo %}
+                        <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-warning" value="Disiscriviti">
+                        </form>
+                    {% else %}
+                        {% if gruppo.iscritti == gruppo.iscritti_massimi %}
+                            <p class="lead text-danger">Gruppo pieno</p>
+                        {% else %}
+                            <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-primary" value="Iscriviti">
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

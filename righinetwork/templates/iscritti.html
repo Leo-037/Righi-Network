@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+<!--<link href="{% static 'css/iscritti.css' %}" rel="stylesheet" type="text/css">-->
+{% endblock head_extra %}
+
+{% block content %}
+<div class="row">
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ gruppo.turno.assemblea.id }}">{{ gruppo.turno.assemblea.data_assemblea }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ gruppo.turno.assemblea.id }}/{{ gruppo.turno.id }}/">{{ gruppo.turno.ora }}</a></li>
+    <li class="breadcrumb-item active">Iscritti</li>
+</ol>
+</div>
+
+<div class="row">
+    <h1 class="text-center text-primary">Iscritti a "{{ gruppo.titolo }}"</h1>
+    <br>
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Classe</th>
+                <th>Sezione</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for iscritto in iscritti %}
+            <tr>
+                <th>{{ forloop.counter }}</th>
+                <th>{{ iscritto.studente.nome }}</th>
+                <th>{{ iscritto.studente.cognome }}</th>
+                <th>{{ iscritto.studente.classe }}</th>
+                <th>{{ iscritto.studente.sezione }}</th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

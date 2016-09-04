@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+{% block content %}
+<div class="row">
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+	<li class="breadcrumb-item active">Tutoring</li>
+</ol>
+</div>
+{% if user.studente.is_rappr_istituto and tutori_da_approvare|length > 0 %}
+<div class="row">
+<h1 class="text-center text-primary">Approva Tutor</h1>
+	<div class="col-md-12 table-responsive">
+		<table class="table">
+			<thead>
+			<tr>
+				<th>#</th>
+				<th>Nome</th>
+				<th>Cognome</th>
+				<th>Materia</th>
+				<th>Mail</th>
+				<th>Cellulare</th>
+				<th>Classi</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+				{% for tutor in tutori_da_approvare %}
+					<tr>
+						<td>{{ forloop.counter }}</td>
+						<td>{{ tutor.studente.nome }}</td>
+						<td>{{ tutor.studente.cognome }}</td>
+						<td>{{ tutor.materia }}</td>
+						<td>{{ tutor.studente.user.email }}</td>
+						<td>{{ tutor.cellulare }}</td>
+						<td>{% if tutor.prima %}1^ {%endif %}{% if tutor.seconda %}2^ {%endif %}{% if tutor.terza %}3^ {%endif %}{% if tutor.quarta %}4^ {%endif %}{% if tutor.quinta %}5^ {%endif %}</td>
+						<td>
+							<a class="btn btn-success" role="button"
+							   href="{{ BASE_DIR }}/tutoring/approva-tutoring/{{ tutor.id }}">Approva</a>
+							<a class="btn btn-danger" data-placement="top"
+							   data-btn-ok-label="Continue" data-btn-ok-icon="glyphicon glyphicon-share-alt"
+							   data-btn-ok-class="btn-success"
+							   data-btn-cancel-label="Stoooop!" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
+							   data-btn-cancel-class="btn-danger"
+							   data-title="Attenzione" data-content="Sicuro di voler respingere questa proposta?"
+							   href="{{ BASE_DIR }}/tutoring/elimina-tutor/{{ tutor.id }}">Respingi</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+<br>
+{% endif %}
+<div class="row">
+	<h1 class="text-center text-primary">Tutoring</h1>
+	<div class="col-sm-4">
+		<div class="dropdown">
+			<button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+			{% if request.GET.q == "" or request.GET.q == None %}Scegli materia{% else %}{{ request.GET.q }}{% endif %}
+			<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<li><a href="/tutoring/?q=Fisica">Fisica</a></li>
+				<li><a href="/tutoring/?q=Latino">Latino</a></li>
+				<li><a href="/tutoring/?q=Matematica">Matematica</a></li>
+				{% if request.GET.q != "" %}<li><a href="/tutoring/?q=">Tutte</a></li>{% endif %}
+			</ul>
+		</div>
+	</div>
+	<br>
+	<br>
+{% if tutori_approvati|length > 0%}
+	<div class="col-md-12 table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Nome</th>
+					<th>Cognome</th>
+					<th>Materia</th>
+					<th>N° Max Studenti</th>
+					<th>Tutoring</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for tutor in tutori_approvati %}
+					<tr>
+						<td>{{ forloop.counter }}</td>
+						<td>{{ tutor.studente.nome }}</td>
+						<td>{{ tutor.studente.cognome }}</td>
+						<td>{{ tutor.materia }}</td>
+						<td>{{ tutor.studenti_max }}</td>
+						<td><a class="btn btn-primary" role="button" href="{{ BASE_DIR }}/tutoring/richiedi-tutoring/{{ tutor.id }}">Chiedi tutoring</a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% else %}
+	<div class="col-sm-12">
+		<br>
+		<h2 class="text-warning text-center"><i>Non ci sono tutor per la tua classe</i></h2>
+	</div>
+</div>
+{% endif %}
+
+{% endblock content %}

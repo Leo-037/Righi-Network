@@ -1,0 +1,26 @@
+﻿{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+{% block head_extra %}
+{{ form.media }}
+<link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
+{% endblock head_extra %}
+
+{% block content %}
+<div class="row">
+    <div class='col-sm-6 col-sm-offset-3'>
+    <h1 class="text-primary">{{ title }}</h1>
+    <hr/>
+        <form method='POST' action='' enctype='multipart/form-data' >{% csrf_token %}
+            {{ form|crispy }}
+            <input type='submit' class='btn btn-primary' value='{{ title }}' />
+        </form>
+    </div>
+</div>
+{% endblock content %}

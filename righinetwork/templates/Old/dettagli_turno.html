@@ -1,0 +1,61 @@
+﻿{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+
+{% block content %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ turno.assemblea.id }}">{{ turno.assemblea.data_assemblea }}</a></li>
+    <li class="breadcrumb-item active">{{ turno.ora }}</li>
+</ol>
+
+<div class="col-xs-6 col-xs-offset-3">
+    <h2>
+        {{ turno.numero_gruppi }} Grupp{% if turno.numero_gruppi == 1%}o{% else %}i{% endif %}:
+    </h2>
+    {% for gruppo in gruppi %}
+
+    <h3>Titolo: {{ gruppo.titolo }}</h3>
+
+    <ul>
+        <li>
+            Aula: {{ gruppo.aula }}
+        </li>
+        <li>
+            Tenuto da {{ gruppo.host }}
+        </li>
+        <li>
+            {{ gruppo.descrizione }}
+        </li>
+        <li>
+            {% if gruppo.iscritti == 0 %}
+            0 / {{ gruppo.iscritti_massimi }} iscritti
+            {% else %}
+            <a href="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">
+                {{ gruppo.iscritti }} / {{ gruppo.iscritti_massimi }} iscritti</a>
+            {% endif %}
+        </li>
+        <li>
+            {% if gruppo_iscritto == gruppo %}
+                <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-simple" value="Disiscriviti">
+                </form>
+            {% else %}
+                <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-simple" value="Iscriviti">
+                </form>
+            {% endif %}
+        </li>
+    </ul>
+    <br/>
+    {% endfor %}
+</div>
+
+{% endblock content %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_extra %}
+<!--<link href="{% static 'css/post_list.css' %}" rel="stylesheet" type="text/css">-->
+{% endblock head_extra %}
+
+{% block content %}
+<div class="row">
+<ol class="breadcrumb">
+	<li class="breadcrumb-item active">Home</li>
+</ol>
+</div>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+		<h1 class="text-primary">{{ title }}</h1>
+		<br>
+		<form method="GET" action="" class="row">
+			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+				<div class="input-group">
+					<input class="form-control" type="text" name="q" placeholder="Cerca post" value="{{ request.GET.q }}">
+					<span class="input-group-btn">
+				  <!-- <input class='btn btn-default' type='submit' value='Search' />-->
+				  <button class="btn btn-primary" type="submit">Cerca <i class="fa fa-search"></i></button>
+				</span>
+				</div>
+			</div>
+		</form>
+		{% if user.studente.is_rappr_istituto or user.is_superuser %}
+		<hr/>
+		<a href="/create/" class="btn btn-primary btn-block" role="button">Aggiungi</a>
+		<hr/>
+		{% endif %}
+
+		{% if object_list|length > 0%}
+			{% for obj in object_list %}
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="thumbnail">
+						{% if obj.image %}
+						<img src='{{ obj.image.url }}' class='img-responsive'/>
+						{% endif %}
+						<div class="caption post-detail-item">
+							{% if obj.draft %}<h3>Staff: Bozza</h3>{% endif %} {% if obj.publish > today %}<h3>Staff:
+							Post Futuro</h3>{% endif %}
+							<h3>
+								<a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a>
+								<small>{{ obj.publish }}</small>
+							</h3>
+							{% if obj.user.get_full_name %}<p class="">Autore: {{ obj.user.get_full_name }}</p>{% endif %}
+							{{ obj.get_markdown|truncatechars_html:170 }}
+							<p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">Leggi</a></p>
+						</div>
+					</div>
+				</div>
+				<hr>
+			</div>
+			{% endfor %}
+
+		<div class="pagination">
+		<span class="step-links">
+			{% if object_list.has_previous %}
+				<a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">precedente</a> -
+			{% endif %}
+			<span class="current">
+				Pagina {{ object_list.number }} di {{ object_list.paginator.num_pages }}
+			</span>
+
+			{% if object_list.has_next %}
+				- <a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">prossima</a>
+			{% endif %}
+		</span>
+		</div>
+		{% else %}
+			<hr>
+			<h2 class="text-center text-warning"><i>Non ci sono comunicazioni</i></h2>
+		{% endif %}
+	</div>
+</div>
+{% endblock content %}

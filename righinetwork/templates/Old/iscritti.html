@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+
+{% block content %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ gruppo.turno.assemblea.id }}">{{ gruppo.turno.assemblea.data_assemblea }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ gruppo.turno.assemblea.id }}/{{ gruppo.turno.id }}/">{{ gruppo.turno.ora }}</a></li>
+    <li class="breadcrumb-item active">Iscritti</li>
+</ol>
+
+<div class="col-xs-6 col-xs-offset-3">
+    <h1>Iscritti a "{{ gruppo.titolo }}" </h1><!--del turno delle {{ gruppo.turno.ora }} dell'assemblea del {{ gruppo.turno.assemblea.data_assemblea }}</h1>-->
+    <h2>
+    <ul>
+        {% for iscritto in iscritti %}
+        <li>
+           {{ iscritto.studente.nome }}
+        </li>
+        {% endfor %}
+    </ul>
+    </h2>
+
+</div>
+{% endblock content %}

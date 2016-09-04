@@ -1,0 +1,29 @@
+﻿{% extends "base.html" %}
+
+{% block head_title %}
+Assemblea {{ assemblea.data_assemblea }}
+{% endblock head_title %}
+
+{% block content %}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+    <li class="breadcrumb-item active">{{ assemblea.data_assemblea }}</li>
+</ol>
+
+
+<div class="col-sm-6 col-sm-offset-3">
+    <h1>Assemblea del {{ assemblea.data_assemblea }}</h1>
+    <h3>
+        {% for turno in turni %}
+        <ul>
+            <li>
+                <a href="./{{ turno.id}}">
+                    {{ forloop.counter }}° Turno</a>, dalle {{ turno.ora }} alle {{ turno.orario_fine }}
+            </li>
+        </ul>
+        <hr/>
+        {% endfor %}
+    </h3>
+</div>
+{% endblock content %}

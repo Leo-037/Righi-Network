@@ -1,0 +1,18 @@
+﻿{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+{% block content %}
+<div class="row">
+    <div class='col-sm-6 col-sm-offset-3'>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input id="submit" type="submit" value="Crea assemblea">
+        </form>
+    </div>
+</div>
+{% endblock content %}
