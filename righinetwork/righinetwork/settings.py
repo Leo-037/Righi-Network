@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 	'assemblee',
 	'comments',
 	'posts',
+	'recuperi',
 	'tutoring',
 ]
 
@@ -108,11 +109,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'leopython1@gmail.com'
-EMAIL_HOST_PASSWORD = 'PythonLeo1'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER
+# EMAIL_HOST_PASSWORD
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
 LANGUAGE_CODE = 'it'
 

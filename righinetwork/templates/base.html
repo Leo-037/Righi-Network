@@ -14,12 +14,13 @@
     <script src="{% static 'js/bootstrap-confirmation.js' %}"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
           type="text/css">
+    <!--<link href="{% static 'css/base_bianco_blu.css' %}" rel="stylesheet" type="text/css">-->
     <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
 
     <!-- cosmo, cyborg, darkly, flatly, lumen, paper, simplex, spacelab, yeti-->
-    <!--{% bootstrap_styles theme='darkly' type='min.css' %}-->
-    <!--{% bootstrap_styles theme='darkly' type='css' %}-->
-    <!--{% bootstrap_styles theme='darkly' type='less' %}-->
+    <!--{% bootstrap_styles theme='lumen' type='min.css' %}-->
+    <!--{% bootstrap_styles theme='lumen' type='css' %}-->
+    <!--{% bootstrap_styles theme='lumen' type='less' %}-->
     <!--{% bootstrap_script use_min=True %}-->
     <style>
         {% block style %}{% endblock style %}
@@ -79,7 +80,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#">Settimana dei recuperi<br></a>
+                    <a href="{{ BASE_DIR }}/recuperi">Settimana dei recuperi<br></a>
                 </li>
                 <li>
                     <a href="#">Righi di sangue<br></a>

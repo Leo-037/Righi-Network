@@ -33,7 +33,7 @@
 		<h1 class="text-primary">{{ title }} <small>{% if instance.draft %}<span style='color:red;'>Bozza</span> {% endif %}{{ instance.publish }}</small></h1>
 		<p>Tempo di lettura: {% if instance.read_time <= 1 %} < 1 minuto {% else %}{{ instance.read_time }} minuti {% endif %}</p>
 		{% if instance.user.get_full_name %}
-			<p>Autore: {{ instance.user.get_full_name }}</p>
+			<p>Autore: {{ instance.user.studente.nome }}</p>
 		{% endif %}
 
 		<p><div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div></p>
@@ -41,51 +41,49 @@
 
 		<div class='row'>
 			<div class='col-sm-12 '>
-
 				<div class='post-detail-item'>{{ instance.get_markdown }}</div>
-
-				<hr/>
-				<br/>
-
-				<div>
-
-					<p class='lead'>Commenti</p>
-					{% if request.user.is_authenticated %}
-					<form method="POST" action="."> {% csrf_token %}
-						{{ comment_form|crispy }}
-						<input type="Submit" value="Commenta" class="btn btn-primary">
-					</form>
-					{% else %}
-					<p>Devi effettuare il login per commentare</p>
-					{% endif %}
-
-					{% for comment in comments %}
-					<hr/>
-						<blockquote>
-							<p>{{ comment.content }}</p>
-							<footer>tramite {{ comment.user }} | {{ comment.timestamp|timesince }} fa | {% if comment.children.count > 0 %}{{ comment.children.count }} Comment{% if comment.children.count > 1 %}i{% else %}o{% endif %} |{% endif %} <a class="comment-reply-btn" href="#">Risposte</a> | <a href="{{ comment.get_absolute_url }}">Conversazione</a></footer>
-							<div class="comment-reply">
-								{% for child_comment in comment.children %}
-									<blockquote>
-										<p>{{ child_comment.content }}</p>
-										<footer>tramite {{ child_comment.user }} | {{ child_comment.timestamp|timesince }} fa</footer>
-									</blockquote>
-								{% endfor %}
-								{% if request.user.is_authenticated %}
-								<form method="POST" action="."> {% csrf_token %}
-									{{ comment_form|crispy }}
-									<input type="hidden" name="parent_id" value="{{ comment.id }}">
-									<input type="Submit" value="Rispondi" class="btn btn-primary">
-								</form>
-								{% else %}
-								<p>Devi effettuare il login per commentare</p>
-								{% endif %}
-							</div>
-						</blockquote>
-					{% endfor %}
-				</div>
 			</div>
 		</div>
+		<hr/>
+
+		{#		<!--<br/>-->#}
+		{#		<!--<div>-->#}
+		{#			<!--<p class='lead'>Commenti</p>-->#}
+		{#			<!--{% if request.user.is_authenticated %}-->#}
+		{#			<!--<form method="POST" action="."> {% csrf_token %}-->#}
+		{#				<!--{{ comment_form|crispy }}-->#}
+		{#				<!--<input type="Submit" value="Commenta" class="btn btn-primary">-->#}
+		{#			<!--</form>-->#}
+		{#			<!--{% else %}-->#}
+		{#			<!--<p>Devi effettuare il login per commentare</p>-->#}
+		{#			<!--{% endif %}-->#}
+		{#			<!--{% for comment in comments %}-->#}
+		{#			<!--<hr/>-->#}
+		{#				<!--<blockquote>-->#}
+		{#					<!--<p>{{ comment.content }}</p>-->#}
+		{#					<!--<footer>tramite {{ comment.user }} | {{ comment.timestamp|timesince }} fa | {% if comment.children.count > 0 %}{{ comment.children.count }} Comment{% if comment.children.count > 1 %}i{% else %}o{% endif %} |{% endif %} <a class="comment-reply-btn" href="#">Risposte</a> | <a href="{{ comment.get_absolute_url }}">Conversazione</a></footer>-->#}
+		{#					<!--<div class="comment-reply">-->#}
+		{#						<!--{% for child_comment in comment.children %}-->#}
+		{#							<!--<blockquote>-->#}
+		{#								<!--<p>{{ child_comment.content }}</p>-->#}
+		{#								<!--<footer>tramite {{ child_comment.user }} | {{ child_comment.timestamp|timesince }} fa</footer>-->#}
+		{#							<!--</blockquote>-->#}
+		{#						<!--{% endfor %}-->#}
+		{#						<!--{% if request.user.is_authenticated %}-->#}
+		{#						<!--<form method="POST" action="."> {% csrf_token %}-->#}
+		{#							<!--{{ comment_form|crispy }}-->#}
+		{#							<!--<input type="hidden" name="parent_id" value="{{ comment.id }}">-->#}
+		{#							<!--<input type="Submit" value="Rispondi" class="btn btn-primary">-->#}
+		{#						<!--</form>-->#}
+		{#						<!--{% else %}-->#}
+		{#						<!--<p>Devi effettuare il login per commentare</p>-->#}
+		{#						<!--{% endif %}-->#}
+		{#					<!--</div>-->#}
+		{#				<!--</blockquote>-->#}
+		{#			<!--{% endfor %}-->#}
+		{#		<!--</div>-->#}
+		{#	<!--</div>-->#}
+		{#<!--</div>-->#}
 	</div>
 </div>
 {% endblock content %}

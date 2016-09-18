@@ -37,7 +37,7 @@ class Gruppo(models.Model):
 
 
 class Iscritto(models.Model):
-	studente = models.ForeignKey(Studente, related_name = "iscritti")
+	studente = models.ForeignKey(Studente, related_name = "iscritti_assemblee")
 	gruppo = models.ForeignKey(Gruppo, on_delete = models.CASCADE)
 
 

@@ -14,29 +14,46 @@
 <div class="row">
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
-		<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
-		<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ turno.assemblea.id }}">{{ turno.assemblea.data_assemblea }}</a></li>
-		<li class="breadcrumb-item active">{{ turno.ora }}</li>
+        {% if recuperi == "true" %}
+		    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/">Settimana dei recuperi</a></li>
+        {% else %}
+            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+		    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ turno.assemblea.id }}">{{ turno.assemblea.data_assemblea }}</a></li>
+        {% endif %}
+		<li class="breadcrumb-item active">{{ turno.ora }} - {{ turno.orario_fine }}</li>
 	</ol>
 </div>
 
 <div class="row">
-    <h1 class="text-center text-primary">Gruppi delle {{ turno.ora }}</h1>
+    {% if recuperi == "true" %}
+        <h1 class="text-center text-primary">Gruppi di {{ turno.giorno.nome }} - ore {{ turno.ora }} / {{ turno.orario_fine }}</h1>
+    {% else %}
+        <h1 class="text-center text-primary">Gruppi delle {{ turno.ora }}</h1>
+    {% endif %}
     <hr>
     {% for gruppo in gruppi %}
         <div class="col-md-12 text-left">
             <div class="well">
-                <h2 class="text-primary">{{ gruppo.titolo }}<small>{{ gruppo.aula }}</small></h2>
+                <h2 class="text-primary">{{ gruppo.titolo }} <small>{{ gruppo.aula }}</small></h2>
                 <p class="lead text-info">Tenuto da {{ gruppo.host }}</p>
                 <p class="lead text-muted">{{ gruppo.descrizione }}</p>
                 {% if mostra_iscrizione == False %}
                     <p class="lead text-info">{% if gruppo.iscritti == 0 %}0 / {{ gruppo.iscritti_massimi }} iscritti
                 {% else %}
-                    <a href="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">
+                    {% if recuperi == "true" %}
+                        <a href="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">
+                    {% else %}
+                        <a href="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">
+                    {% endif %}
+
                         {{ gruppo.iscritti }} / {{ gruppo.iscritti_massimi }} iscritti</a>
                     {% endif %}</p>
                     {% if gruppo_iscritto == gruppo %}
-                        <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
+                        {% if recuperi == "true" %}
+                            <form method="POST" action="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
+                        {% else %}
+                            <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
+                        {% endif %}
                             {% csrf_token %}
                             <input type="submit" class="btn btn-warning" value="Disiscriviti">
                         </form>
@@ -44,7 +61,11 @@
                         {% if gruppo.iscritti == gruppo.iscritti_massimi %}
                             <p class="lead text-danger">Gruppo pieno</p>
                         {% else %}
-                            <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
+                            {% if recuperi == "true" %}
+                                <form method="POST" action="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
+                            {% else %}
+                                <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
+                            {% endif %}
                                 {% csrf_token %}
                                 <input type="submit" class="btn btn-primary" value="Iscriviti">
                             </form>

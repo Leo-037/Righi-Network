@@ -9,33 +9,20 @@ from .models import *
 
 
 @login_required(login_url = '/login/')
-def assemblee_view(request):
-	title = "Assemblee"
+def settimana_view(request):
+	title = "Settimana dei recuperi"
 	today = time.strftime("%Y-%m-%d")
-	assemblee_correnti = Assemblea.objects.filter(mostra_assemblea__lte = today,
-	                                              nascondi_assemblea__gt = today).order_by("-data_assemblea", "-id")
-	assemblee_vecchie = Assemblea.objects.filter(mostra_assemblea__lte = today,
-	                                             nascondi_assemblea__lte = today).order_by("-data_assemblea")
-	assemblee_future = Assemblea.objects.filter(mostra_assemblea__gte = today).order_by("data_assemblea")
-	context = {'assemblee_correnti': assemblee_correnti,
-	           'assemblee_future': assemblee_future,
-	           'assemblee_vecchie': assemblee_vecchie,
+	settimana = Settimana.objects.get(mostra_settimana__lte = today,
+	                                  nascondi_settimana__gt = today)
+	giorni = Giorno.objects.filter(settimana = settimana).order_by('data')
+	context = {'settimana': settimana,
+	           'giorni': giorni,
 	           'title': title}
-	return render(request, 'assemblee.html', context)
+	return render(request, 'recuperi.html', context)
 
 
 @login_required(login_url = '/login/')
-def dettagliassemblea_view(request, id_assemblea):
-	assemblea = Assemblea.objects.get(pk = id_assemblea)
-	turni = Turno.objects.filter(assemblea = assemblea).order_by("ora")
-	context = {'assemblea': assemblea,
-	           'turni': turni,
-	           }
-	return render(request, 'dettagli_assemblea.html', context)
-
-
-@login_required(login_url = '/login/')
-def dettagliturno_view(request, id_turno):
+def scegli_gruppo_view(request, id_turno):
 	turno = Turno.objects.get(pk = id_turno)
 	gruppi = Gruppo.objects.filter(turno = turno)
 	gruppo_iscritto = None
@@ -45,8 +32,8 @@ def dettagliturno_view(request, id_turno):
 			gruppo_iscritto = gruppo
 
 	today = datetime.date.today()
-	assemblea = turno.assemblea
-	if assemblea.mostra_assemblea < today and assemblea.nascondi_assemblea > today:
+	settimana = turno.giorno.settimana
+	if settimana.mostra_settimana < today and settimana.nascondi_settimana > today:
 		mostra_iscrizione = False
 	else:
 		mostra_iscrizione = True
@@ -58,31 +45,30 @@ def dettagliturno_view(request, id_turno):
 	           'gruppo_iscritto': gruppo_iscritto,
 	           'mostra_iscrizione': mostra_iscrizione,
 	           'title': title,
-	           'recuperi': "false"
+	           'recuperi': "true"
 	           }
-
 
 	return render(request, 'dettagli_turno.html', context)
 
 
 @login_required(login_url = '/login/')
-def create_assemblea_view(request):
-	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
-		print(request.user.email)
-		title = "Crea Assemblea"
-		if request.method == "GET":
-			form = AssembleaForm()
-			return render(request, 'crea_assemblea.html', {'title': title, 'form': form})
-		elif request.method == "POST":
-			form = AssembleaForm(request.POST)
-			form.save()
-			return HttpResponseRedirect("/assemblee/")
-	else:
-		raise Http404
+def create_settimana_view(request):
+	# if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+	# 	print(request.user.email)
+	# 	title = "Crea Assemblea"
+	# 	if request.method == "GET":
+	# 		form = AssembleaForm()
+	# 		return render(request, 'crea_assemblea.html', {'title': title, 'form': form})
+	# 	elif request.method == "POST":
+	# 		form = AssembleaForm(request.POST)
+	# 		form.save()
+	# 		return HttpResponseRedirect("/assemblee/")
+	# else:
+	raise Http404
 
 
 @login_required(login_url = '/login/')
-def iscrizione_view(request, id_assemblea, id_turno, id_gruppo):
+def iscrizione_view(request, id_settimana, id_giorno, id_turno, id_gruppo):
 	if request.method == "POST":
 		turno = Turno.objects.filter(id = id_turno)
 		for gruppo in Gruppo.objects.filter(turno = turno):
@@ -98,13 +84,13 @@ def iscrizione_view(request, id_assemblea, id_turno, id_gruppo):
 			iscritto.save()
 			gruppo.save()
 
-			return HttpResponseRedirect("/assemblee/" + str(id_assemblea) + "/" + str(id_turno) + "/")
+			return HttpResponseRedirect("/recuperi/scegli_gruppo/" + str(id_turno) + "/")
 		else:
 			raise Http404
 
 
 @login_required(login_url = '/login/')
-def disiscrizione_view(request, id_assemblea, id_turno, id_gruppo):
+def disiscrizione_view(request, id_settimana, id_giorno, id_turno, id_gruppo):
 	if request.method == "POST":
 		gruppo = Gruppo.objects.get(pk = id_gruppo)
 		iscritto = Iscritto.objects.get(studente = request.user.studente, gruppo = gruppo)
@@ -112,7 +98,7 @@ def disiscrizione_view(request, id_assemblea, id_turno, id_gruppo):
 		iscritto.delete()
 		gruppo.save()
 
-		return HttpResponseRedirect("/assemblee/" + str(id_assemblea) + "/" + str(id_turno) + "/")
+		return HttpResponseRedirect("/recuperi/scegli_gruppo/" + str(id_turno) + "/")
 
 
 @login_required(login_url = '/login/')
@@ -122,4 +108,4 @@ def iscritti_view(request, id_gruppo):
 	iscritti = Iscritto.objects.filter(gruppo = gruppo).order_by("studente__classe", "studente__sezione",
 	                                                             "studente__cognome")
 
-	return render(request, 'iscritti.html', {'title': title, 'gruppo': gruppo, 'iscritti': iscritti})
+	return render(request, 'iscritti.html', {'title': title, 'gruppo': gruppo, 'iscritti': iscritti, 'recuperi': "true"})

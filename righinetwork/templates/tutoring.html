@@ -70,7 +70,7 @@
 				<li><a href="/tutoring/?q=Fisica">Fisica</a></li>
 				<li><a href="/tutoring/?q=Latino">Latino</a></li>
 				<li><a href="/tutoring/?q=Matematica">Matematica</a></li>
-				{% if request.GET.q != "" %}<li><a href="/tutoring/?q=">Tutte</a></li>{% endif %}
+				{% if not request.GET.q == None and request.GET.q != "" %}<li><a href="/tutoring/?q=">Tutte</a></li>{% endif %}
 			</ul>
 		</div>
 	</div>
@@ -81,22 +81,16 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>#</th>
 					<th>Nome</th>
-					<th>Cognome</th>
 					<th>Materia</th>
-					<th>N° Max Studenti</th>
 					<th>Tutoring</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for tutor in tutori_approvati %}
 					<tr>
-						<td>{{ forloop.counter }}</td>
-						<td>{{ tutor.studente.nome }}</td>
-						<td>{{ tutor.studente.cognome }}</td>
+						<td>{{ tutor.studente.cognome }}  {{ tutor.studente.nome }}</td>
 						<td>{{ tutor.materia }}</td>
-						<td>{{ tutor.studenti_max }}</td>
 						<td><a class="btn btn-primary" role="button" href="{{ BASE_DIR }}/tutoring/richiedi-tutoring/{{ tutor.id }}">Chiedi tutoring</a></td>
 					</tr>
 				{% endfor %}

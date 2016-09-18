@@ -10,7 +10,7 @@ class TutorModelAdmin(admin.ModelAdmin):
 	list_filter = ["studente", "materia", "prima", "seconda", "terza", "quarta", "quinta", "approvato"]
 	list_search = ["studente", "materia", "prima", "seconda", "terza", "quarta", "quinta", "approvato"]
 
-	def mostra_studente(obj):
+	def mostra_studente(self, obj):
 		return str(obj.studente.nome)
 
 	form = TutorAdminForm

@@ -73,8 +73,10 @@
 		</span>
 		</div>
 		{% else %}
-			<hr>
-			<h2 class="text-center text-warning"><i>Non ci sono comunicazioni</i></h2>
+			{% if not user.studente.is_rappr_istituto and not user.is_superuser %}
+				<hr>
+			{% endif %}
+		<h2 class="text-center text-warning"><i>Non ci sono comunicazioni</i></h2>
 		{% endif %}
 	</div>
 </div>

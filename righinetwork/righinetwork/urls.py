@@ -9,9 +9,10 @@ from accounts.views import login_view, logout_view, register_view, cambia_passwo
 urlpatterns = [
 	url(r'^admin/', admin.site.urls),
 	url(r'^assemblee/', include('assemblee.urls', namespace = 'assemblee')),
-	url(r'^comments/', include("comments.urls", namespace='comments')),
+	# url(r'^comments/', include("comments.urls", namespace='comments')),
 	url(r'^login/', login_view, name="login"),
 	url(r'^logout/', logout_view, name="logout"),
+	url(r'^recuperi/', include('recuperi.urls', namespace = 'recuperi')),
 	url(r'^register/', register_view, name="register"),
 	url(r'^tutoring/', include("tutoring.urls", namespace='tutoring')),
 	url(r'^cambia-password/', cambia_password, name = "user-settings"),

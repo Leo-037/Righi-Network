@@ -24,10 +24,7 @@ Assemblea {{ assemblea.data_assemblea }}
         {% for turno in turni %}
             <div class="col-md-12">
                 <div class="well">
-                    <a href="./{{ turno.id}}">
-                        <h2 class="text-primary">{{ forloop.counter }}° Turno</a>
-                    <small>dalle {{ turno.ora }} alle {{ turno.orario_fine }}</small>
-                    </h2>
+                    <a href="./{{ turno.id}}"><h2 class="text-primary">{{ forloop.counter }}° Turno</a> <small>dalle {{ turno.ora }} alle {{ turno.orario_fine }}</small></h2>
                     <p class="lead text-muted"></p>
                 </div>
             </div>
