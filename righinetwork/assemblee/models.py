@@ -41,19 +41,19 @@ class Iscritto(models.Model):
 	gruppo = models.ForeignKey(Gruppo, on_delete = models.CASCADE)
 
 
+
 class AssembleaForm(ModelForm):
+	n_turni = forms.IntegerField(label = "Numero turni", min_value = 0, )
+
 	class Meta:
 		model = Assemblea
 		data_widget = forms.SelectDateWidget()
 
-		mostra_ass_widget = forms.SelectDateWidget()
-		nascondi_ass_widget = forms.SelectDateWidget()
-
-		fields = ['data_assemblea', 'mostra_assemblea', 'nascondi_assemblea']
+		fields = ['sede', 'data_assemblea', 'mostra_assemblea', 'nascondi_assemblea', 'n_turni']
 		widgets = {
 			'data_assemblea': data_widget,
-			'mostra_assemblea': mostra_ass_widget,
-			'nascondi_assemblea': nascondi_ass_widget,
+			'mostra_assemblea': data_widget,
+			'nascondi_assemblea': data_widget,
 		}
 
 
@@ -61,18 +61,24 @@ class TurnoForm(ModelForm):
 	class Meta:
 		model = Turno
 		ora_widget = forms.TimeInput()
-		orario_fine_widget = forms.TimeInput()
+
 		fields = ['ora', 'orario_fine', 'assemblea']
 		widgets = {
 			'ora': ora_widget,
-			'orario_fine': orario_fine_widget,
+			'orario_fine': ora_widget,
 		}
 
 
 class GruppoForm(ModelForm):
 	class Meta:
 		model = Gruppo
+		text_widget = forms.TextInput()
 		fields = ['aula', 'titolo', 'descrizione', 'host', 'iscritti_massimi', 'turno']
+		widgets = {
+			'aula': text_widget,
+			'titolo': text_widget,
+			'host': text_widget,
+		}
 
 
 class IscrittoForm(ModelForm):

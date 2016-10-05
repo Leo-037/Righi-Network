@@ -57,13 +57,14 @@ class TurnoAdminForm(forms.ModelForm):
 
 class GruppoAdminForm(forms.ModelForm):
 	turno = TurnoModelChoiceField(Turno.objects.all().order_by('ora'))
+	sede = forms.CharField(max_length = 150)
 	aula = forms.CharField(max_length = 150)
 	titolo = forms.CharField(max_length = 150)
 	host = forms.CharField(max_length = 150)
 
 	class Meta:
 		model = Gruppo
-		fields = ['aula', 'titolo', 'descrizione', 'host', 'iscritti_massimi', 'recupero', 'turno']
+		fields = ['sede', 'aula', 'titolo', 'descrizione', 'host', 'iscritti', 'iscritti_massimi', 'recupero', 'turno']
 
 
 class IscrittoAdminForm(forms.ModelForm):

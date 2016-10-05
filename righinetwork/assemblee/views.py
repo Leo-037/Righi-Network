@@ -1,12 +1,88 @@
 import datetime
 import time
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import *
 
+
+# CREATE
+
+@login_required(login_url = '/login/')
+def create_assemblea_view(request):
+	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+		title = "Crea Assemblea"
+		if request.method == "GET":
+			form = AssembleaForm(initial = {'n_turni': 0})
+			return render(request, 'form.html', {'title': title, 'form': form})
+		elif request.method == "POST":
+			form = AssembleaForm(request.POST)
+			if form.is_valid():
+				n_turni = form.cleaned_data['n_turni']
+				assemblea = form.save()
+				if n_turni >= 1:
+					return HttpResponseRedirect(
+						"/assemblee/aggiungi_turno/" + str(assemblea.id) + "/" + str(n_turni) + "/")
+				else:
+					return HttpResponseRedirect("/assemblee/" + str(assemblea.id) + "/")
+	else:
+		raise Http404
+
+
+@login_required(login_url = '/login/')
+def create_turno_view(request, id_assemblea, n_turni):
+	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+		next = request.GET.get('next')
+		if next:
+			return redirect(next)
+		title = "Aggiungi Turno"
+		if request.method == "GET":
+			assemblea = Assemblea.objects.get(id = id_assemblea)
+			form = TurnoForm(initial = {'assemblea': assemblea})
+			form.fields['assemblea'].widget = forms.HiddenInput()
+			return render(request, 'form.html', {'title': title, 'form': form})
+		elif request.method == "POST":
+			form = TurnoForm(request.POST)
+			form.save()
+
+			assemblea = Assemblea.objects.get(id = id_assemblea)
+			int(n_turni)
+			if int(n_turni) > 1:
+				return HttpResponseRedirect(
+					"/assemblee/aggiungi_turno/" + str(assemblea.id) + "/" + str(n_turni - 1) + "/")
+			else:
+				return HttpResponseRedirect("/assemblee/" + str(assemblea.id) + "/")
+	else:
+		raise Http404
+
+
+@login_required(login_url = '/login/')
+def create_gruppo_view(request, id_turno):
+	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+		next = request.GET.get('next')
+		if next:
+			return redirect(next)
+		title = "Aggiungi Gruppo"
+		if request.method == "GET":
+			turno = Turno.objects.get(id = id_turno)
+			form = GruppoForm(initial = {'turno': turno})
+			form.fields['turno'].widget = forms.HiddenInput()
+			return render(request, 'form.html', {'title': title, 'form': form})
+		elif request.method == "POST":
+			form = GruppoForm(request.POST)
+			form.save()
+
+			turno = Turno.objects.get(id = id_turno)
+			assemblea = Assemblea.objects.get(id = turno.assemblea.id)
+			return HttpResponseRedirect("/assemblee/" + str(assemblea.id) + "/" + str(turno.id) + "/")
+	else:
+		raise Http404
+
+
+# RETRIEVE
 
 @login_required(login_url = '/login/')
 def assemblee_view(request):
@@ -46,7 +122,7 @@ def dettagliturno_view(request, id_turno):
 
 	today = datetime.date.today()
 	assemblea = turno.assemblea
-	if assemblea.mostra_assemblea < today and assemblea.nascondi_assemblea > today:
+	if assemblea.mostra_assemblea < today < assemblea.nascondi_assemblea or assemblea.data_assemblea >= today - 1:
 		mostra_iscrizione = False
 	else:
 		mostra_iscrizione = True
@@ -61,24 +137,122 @@ def dettagliturno_view(request, id_turno):
 	           'recuperi': "false"
 	           }
 
-
 	return render(request, 'dettagli_turno.html', context)
 
 
+# UPDATE
+
 @login_required(login_url = '/login/')
-def create_assemblea_view(request):
+def update_assemblea_view(request, id_assemblea):
+	if not request.user.studente.is_rappr_istituto and not request.user.is_superuser:
+		raise Http404
+	instance = get_object_or_404(Assemblea, id = id_assemblea)
+	form = AssembleaForm(request.POST or None, request.FILES or None, instance = instance, initial = {'n_turni': 0})
+	form.fields['n_turni'].widget = forms.HiddenInput()
+	if form.is_valid():
+		instance = form.save(commit = False)
+		instance.save()
+		messages.success(request, "<h4><a href='#'>Assemblea</a> salvata</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/assemblee/" + str(instance.id) + "/")
+
+	context = {
+		"title": "Modifica assemblea",
+		"instance": instance,
+		"form": form,
+	}
+	return render(request, "form.html", context)
+
+
+@login_required(login_url = '/login/')
+def update_turno_view(request, id_turno):
+	if not request.user.studente.is_rappr_istituto and not request.user.is_superuser:
+		raise Http404
+	instance = get_object_or_404(Turno, id = id_turno)
+	form = TurnoForm(request.POST or None, request.FILES or None, instance = instance,
+	                 initial = {'assemblea': instance.assemblea})
+	form.fields['assemblea'].widget = forms.HiddenInput()
+	if form.is_valid():
+		instance = form.save(commit = False)
+		instance.save()
+		messages.success(request, "<h4><a href='#'>Turno</a> salvato</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/assemblee/" + str(instance.assemblea.id) + "/" + str(instance.id) + "/")
+
+	context = {
+		"title": "Modifica turno",
+		"instance": instance,
+		"form": form,
+	}
+	return render(request, "form.html", context)
+
+
+@login_required(login_url = '/login/')
+def update_gruppo_view(request, id_gruppo):
+	if not request.user.studente.is_rappr_istituto and not request.user.is_superuser:
+		raise Http404
+	instance = get_object_or_404(Gruppo, id = id_gruppo)
+	form = GruppoForm(request.POST or None, request.FILES or None, instance = instance,
+	                  initial = {'turno': instance.turno})
+	form.fields['turno'].widget = forms.HiddenInput()
+	if form.is_valid():
+		instance = form.save(commit = False)
+		instance.save()
+		messages.success(request, "<h4><a href='#'>Gruppo</a> salvato</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect(
+			"/assemblee/" + str(instance.turno.assemblea.id) + "/" + str(instance.turno.id) + "/")
+
+	context = {
+		"title": "Modifica turno",
+		"instance": instance,
+		"form": form,
+	}
+	return render(request, "form.html", context)
+
+
+# DELETE
+
+@login_required(login_url = '/login/')
+def delete_assemblea_view(request, id_assemblea):
 	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
-		print(request.user.email)
-		title = "Crea Assemblea"
-		if request.method == "GET":
-			form = AssembleaForm()
-			return render(request, 'crea_assemblea.html', {'title': title, 'form': form})
-		elif request.method == "POST":
-			form = AssembleaForm(request.POST)
-			form.save()
-			return HttpResponseRedirect("/assemblee/")
+		assemblea = Assemblea.objects.get(id = id_assemblea)
+		assemblea.delete()
+		messages.success(request, "<h4>Cancellato</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/assemblee/")
 	else:
 		raise Http404
+
+
+@login_required(login_url = '/login/')
+def delete_turno_view(request, id_turno):
+	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+		turno = Turno.objects.get(id = id_turno)
+		turno.delete()
+		messages.success(request, "<h4>Cancellato</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/assemblee/" + str(turno.assemblea.id) + "/")
+	else:
+		raise Http404
+
+
+@login_required(login_url = '/login/')
+def delete_gruppo_view(request, id_gruppo):
+	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+		gruppo = Gruppo.objects.get(id = id_gruppo)
+		gruppo.delete()
+		messages.success(request, "<h4>Cancellato</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/assemblee/" + str(gruppo.turno.assemblea.id) + "/" + str(gruppo.turno.id) + "/")
+	else:
+		raise Http404
+
+
+# ISCRITTI
+
+@login_required(login_url = '/login/')
+def iscritti_view(request, id_gruppo):
+	title = "Iscritti al gruppo"
+	gruppo = Gruppo.objects.get(pk = id_gruppo)
+	iscritti = Iscritto.objects.filter(gruppo = gruppo).order_by("studente__classe", "studente__sezione",
+	                                                             "studente__cognome")
+
+	return render(request, 'iscritti.html', {'title': title, 'gruppo': gruppo, 'iscritti': iscritti})
 
 
 @login_required(login_url = '/login/')
@@ -113,13 +287,3 @@ def disiscrizione_view(request, id_assemblea, id_turno, id_gruppo):
 		gruppo.save()
 
 		return HttpResponseRedirect("/assemblee/" + str(id_assemblea) + "/" + str(id_turno) + "/")
-
-
-@login_required(login_url = '/login/')
-def iscritti_view(request, id_gruppo):
-	title = "Iscritti al gruppo"
-	gruppo = Gruppo.objects.get(pk = id_gruppo)
-	iscritti = Iscritto.objects.filter(gruppo = gruppo).order_by("studente__classe", "studente__sezione",
-	                                                             "studente__cognome")
-
-	return render(request, 'iscritti.html', {'title': title, 'gruppo': gruppo, 'iscritti': iscritti})

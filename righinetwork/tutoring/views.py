@@ -72,7 +72,8 @@ def tutor_form_view(request):
 			quarta = True
 			quinta = True
 
-		tutor = Tutor(studente = studente, cellulare = cellulare, materia = materia, studenti_max = studenti_max, prima = prima,
+		tutor = Tutor(studente = studente, cellulare = cellulare, materia = materia, studenti_max = studenti_max,
+		              prima = prima,
 		              seconda = seconda, terza = terza, quarta = quarta, quinta = quinta)
 		tutor.save()
 		messages.success(request, "Richiesta inviata. Verrà approvata il più presto possibile",

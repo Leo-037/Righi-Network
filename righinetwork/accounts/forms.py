@@ -4,10 +4,9 @@ from django.contrib.auth import (
 	get_user_model,
 )
 
-
-
-from .custom_models import IntegerRangeField, UpperCharField
 from .models import *
+
+# from allauth.account.forms import LoginForm, SignupForm
 
 User = get_user_model()
 
@@ -20,9 +19,6 @@ class UserLoginForm(forms.Form):
 		username = self.cleaned_data.get("username")
 		password = self.cleaned_data.get("password")
 
-		# user_qs = User.objects.filter(username=username)
-		# if user_qs.count() == 1:
-		#     user = user_qs.first()
 		if username and password:
 			user = authenticate(username = username, password = password)
 			if not user:
@@ -43,7 +39,6 @@ class UserRegisterForm(forms.ModelForm):
 	cognome = forms.CharField(label = 'Cognome')
 	classe = forms.IntegerField(min_value = 1, max_value = 5)
 	sezione = forms.CharField(max_length = 1)
-
 
 	class Meta:
 		model = User
@@ -81,6 +76,7 @@ class UserRegisterForm(forms.ModelForm):
 		sezione.upper()
 		return sezione
 
+
 class UserUpdateForm(forms.ModelForm):
 	email = forms.EmailField(label = 'Indirizzo Email')
 	email2 = forms.EmailField(label = 'Conferma Email')
@@ -90,7 +86,6 @@ class UserUpdateForm(forms.ModelForm):
 	cognome = forms.CharField(label = 'Cognome')
 	classe = forms.IntegerField(min_value = 1, max_value = 5)
 	sezione = forms.CharField(max_length = 1)
-
 
 	class Meta:
 		model = User

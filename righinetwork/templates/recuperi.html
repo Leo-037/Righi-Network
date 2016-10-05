@@ -23,50 +23,60 @@
 <hr class="hidden-lg hidden-md">
 
 <div class="row">
-    <h1 class="text-center text-primary">Settimana dei recuperi del {{ settimana.data_inizio }}</h1>
-    <hr>
-    <div class="col-md-12">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Turno</th>
-                {% for giorno in giorni %}
-                    <th class="col-md-2">{{ giorno.nome }}</th>
-                {% endfor %}
-            </tr>
-            </thead>
-            <tbody>
-                {% highest_numero_turni giorni as numero_turni%}
-                {% for i in numero_turni %}
-                {% with forloop.counter0 as n%}
-                    <tr>
-                        <td class="text-center vert-align">{{ forloop.counter }}</td>
-                        {% for giorno in giorni %}
-                            {% query_turni giorno index=n as turno %}
-                            {% query_gruppi turno user as gruppi%}
-                            {% if not gruppi|length == 0 %}
-                                {% for gruppo in gruppi %}
-                                    {% if gruppo.recupero == True %}
-                                        <td class="danger text-center" style="vertical-align: middle;"><div style="height: 70px; overflow:auto;">{{ gruppo.titolo }}<br>{{ gruppo.turno.ora }} - {{ gruppo.turno.orario_fine}}<br>{{ gruppo.aula }}</div></td>
+    {% if settimana %}
+        <h1 class="text-center text-primary">Settimana dei recuperi del {{ settimana.data_inizio }}</h1>
+        <hr>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+            <div class="btn-group btn-group-justified" role="group">
+                <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina settimana</a>
+            </div>
+            <hr>
+        {% endif %}
+        <div class="col-md-12">
+            <table class="table table-bordered table-responsive">
+                <thead>
+                <tr>
+                    <th>Turno</th>
+                    {% for giorno in giorni %}
+                        <th class="col-md-2 text-center">{% if user.studente.is_rappr_istituto or user.is_superuser %}<a href="{{ giorno.id }}/">{{ giorno.nome }}</a>{% else %}{{ giorno.nome }}{% endif %}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                    {% for riga in tabella %}
+                        <tr>
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            {% for casella in riga %}
+                            {% with casella as gruppo %}
+                                {% if gruppo.titolo %}
+                                    {% if gruppo.recupero %}
+                                        <td class="danger text-center" style="vertical-align: middle;"><div style="height: 100px; overflow:auto;">{{ gruppo.titolo }}<br>{{ gruppo.turno.ora }} - {{ gruppo.turno.orario_fine}}<br>{{ gruppo.aula }}</div></td>
                                     {% else %}
-                                        <td class="success text-center" style="vertical-align: middle;"><div style="height: 70px; overflow:auto;"><a href="scegli_gruppo/{{ turno.id }}">{{ gruppo.titolo }}</a><br>{{ gruppo.turno.ora }} - {{ gruppo.turno.orario_fine}}<br>{{ gruppo.aula }}</div></td>
+                                        <td class="success text-center" style="vertical-align: middle;"><div style="height: 100px; overflow:auto;"><a href="scegli_gruppo/{{ gruppo.turno.id }}">{{ gruppo.titolo }}</a><br>{{ gruppo.turno.ora }} - {{ gruppo.turno.orario_fine}}<br>{{ gruppo.aula }}</div></td>
                                     {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {% if not turno.id == None %}
-                                    <td class="text-center" style="vertical-align: middle;"><div style="height: 70px; overflow:auto;"><a href="scegli_gruppo/{{ turno.id }}">Scegli un gruppo</a></div></td>
                                 {% else %}
-                                    <td style="vertical-align: middle;"><div style="height: 70px; overflow:auto;"></div></td>
+                                    {% if gruppo > 0 %}
+                                        <td class="text-center" style="vertical-align: middle;"><div style="height: 100px; overflow:auto;"><a href="scegli_gruppo/{{ gruppo }}">Scegli un gruppo</a></div></td>
+                                    {% else %}
+                                        <td style="vertical-align: middle;"><div style="height: 100px; overflow:auto;"></div></td>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-
-                        {% endfor %}
-                    </tr>
-                {% endwith %}
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                            {% endwith %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h1 class="text-center text-primary">Settimana dei recuperi</h1>
+        <hr/>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+            <a href="aggiungi_settimana/" class="btn btn-primary btn-block" role="button">Aggiungi settimana dei recuperi</a>
+            <hr>
+        {% endif %}
+        <h2 class="text-center text-warning"><i>Settimana dei recuperi non ancora pianificata</i></h2>
+    {% endif %}
 </div>
 
 {% endblock content %}

@@ -127,7 +127,7 @@ class TurnoModelAdmin(admin.ModelAdmin):
 
 
 class GruppoModelAdmin(admin.ModelAdmin):
-	list_display = ["titolo", "aula", "descrizione", "host", "mostra_iscritti", "desc_turno", "desc_settimana"]
+	list_display = ["titolo", "sede", "aula", "descrizione", "host", "mostra_iscritti", "desc_turno", "desc_settimana"]
 	list_display_links = ["titolo"]
 	list_filter = ["titolo", "aula", "host"]
 	list_search = ["titolo", "aula", "host"]
@@ -179,7 +179,7 @@ class IscrittoModelAdmin(admin.ModelAdmin):
 		return "dalle {} alle {}".format(obj.gruppo.turno.ora, obj.gruppo.turno.orario_fine)
 
 	def settimana(self, obj):
-		return str(obj.gruppo.turno.giorno.settimana.data)
+		return str(obj.gruppo.turno.giorno.settimana.data_inizio)
 
 	form = IscrittoAdminForm
 

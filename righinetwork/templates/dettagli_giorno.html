@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}
+{{ giorno.nome }} {{ giorno.data }}
+{% endblock head_title %}
+
+{% block head_extra %}
+{% endblock head_extra %}
+
+{% block content %}
+<div class="row">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/">Settimana dei recuperi</a></li>
+        <li class="breadcrumb-item active">{{ giorno.nome }} {{ giorno.data }}</li>
+    </ol>
+</div>
+<div class="col-md-10 col-md-offset-1">
+    <div class="row">
+        <h1 class="text-center text-primary">{{ giorno.nome }} {{ giorno.data }}</h1>
+        <hr>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+        <div class="btn-group btn-group-justified" role="group">
+            <a href="{{ BASE_DIR }}/recuperi/aggiungi_turno/{{ giorno.id }}/" class="btn btn-primary btn-block" role="button">Aggiungi turno</a>
+        </div>
+        <hr>
+        {% endif %}
+        {% for turno in turni %}
+            <div class="col-md-12">
+                <div class="well">
+                    <a href="{{ BASE_DIR }}/recuperi/scegli_gruppo/{{ turno.id}}/"><h2 class="text-primary">{{ forloop.counter }}° Turno</a> <small>dalle {{ turno.ora }} alle {{ turno.orario_fine }}</small></h2>
+                    <p class="lead text-muted"></p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

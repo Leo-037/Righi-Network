@@ -6,7 +6,6 @@ Assemblea {{ assemblea.data_assemblea }}
 {% endblock head_title %}
 
 {% block head_extra %}
-<!--<link href="{% static 'css/dettagli_assemblea.css' %}" rel="stylesheet" type="text/css">-->
 {% endblock head_extra %}
 
 {% block content %}
@@ -17,10 +16,18 @@ Assemblea {{ assemblea.data_assemblea }}
         <li class="breadcrumb-item active">{{ assemblea.data_assemblea }}</li>
     </ol>
 </div>
-
+<div class="col-md-10 col-md-offset-1">
     <div class="row">
         <h1 class="text-center text-primary">Assemblea del {{ assemblea.data_assemblea }}</h1>
         <hr>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+        <div class="btn-group btn-group-justified" role="group">
+            <a href="{{ BASE_DIR }}/assemblee/aggiungi_turno/{{ assemblea.id }}/1/" class="btn btn-primary btn-block" role="button">Aggiungi turno</a>
+            <a href="update/" class="btn btn-warning btn-block" role="button">Modifica assemblea</a>
+            <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina assemblea</a>
+        </div>
+        <hr>
+        {% endif %}
         {% for turno in turni %}
             <div class="col-md-12">
                 <div class="well">
