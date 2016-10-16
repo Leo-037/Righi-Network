@@ -102,7 +102,6 @@ def elimina_tutor(request, id_tutor):
 		tutor.delete()
 		return HttpResponseRedirect("/tutoring/")
 	else:
-		print(request.user.studente.is_rappr_istituto)
 		raise Http404
 
 

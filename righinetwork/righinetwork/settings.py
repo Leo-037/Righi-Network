@@ -1,4 +1,5 @@
 import os
+import private_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -6,8 +7,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^6$ug=1sa_k+-p7m!4yd)9+_8o8@ymy5d_9o-p+x3s^vab1xgy'
+SECRET_KEY = private_settings.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -23,10 +23,15 @@ INSTALLED_APPS = [
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.messages',
+	# 'django.contrib.sites',
 	'django.contrib.staticfiles',
 
+	# 'allauth',
+	# 'allauth.account',
+	# 'allauth.socialaccount',
 	'bootstrap_themes',
 	'crispy_forms',
+	'crudbuilder',
 	'django_bootstrap_breadcrumbs',
 	'django_tables2',
 	'markdown_deux',
@@ -39,6 +44,8 @@ INSTALLED_APPS = [
 	'recuperi',
 	'tutoring',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
 	'django.middleware.locale.LocaleMiddleware',
@@ -75,6 +82,14 @@ TEMPLATES = [
 		},
 	},
 ]
+
+# AUTHENTICATION_BACKENDS = (
+# 	# Needed to login by username in Django admin, regardless of `allauth`
+# 	'django.contrib.auth.backends.ModelBackend',
+#
+# 	# `allauth` specific authentication methods, such as login by e-mail
+# 	'allauth.account.auth_backends.AuthenticationBackend',
+# )
 
 WSGI_APPLICATION = 'righinetwork.wsgi.application'
 
@@ -139,3 +154,12 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
+
+# Django allauth
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_FORMS = {'signup': 'accounts.forms.UserRegisterForm', 'login': 'accounts.forms.UserLoginForm'}
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = False
+LOGIN_REDIRECT_URL = '/'

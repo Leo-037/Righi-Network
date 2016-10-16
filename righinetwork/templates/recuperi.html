@@ -28,7 +28,7 @@
         <hr>
         {% if user.studente.is_rappr_istituto or user.is_superuser %}
             <div class="btn-group btn-group-justified" role="group">
-                <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina settimana</a>
+                <a href="{{ settimana.id }}/delete/" class="btn btn-danger btn-block" role="button">Elimina settimana</a>
             </div>
             <hr>
         {% endif %}

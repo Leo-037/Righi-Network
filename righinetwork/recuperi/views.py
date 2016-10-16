@@ -27,7 +27,6 @@ def create_settimana_view(request):
 				primo_giorno = settimana.data_inizio
 				ultimo_giorno = settimana.data_fine
 				numero_giorni = abs((primo_giorno - ultimo_giorno).days) + 1
-				print(str(numero_giorni))
 
 				giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"]
 				for data in (primo_giorno + datetime.timedelta(n) for n in range(numero_giorni)):
@@ -133,7 +132,6 @@ def settimana_view(request):
 		giorni = False
 		tabella = False
 
-	print(tabella)
 	context = {'settimana': settimana,
 	           'giorni': giorni,
 	           'tabella': tabella,
@@ -237,6 +235,38 @@ def update_gruppo_view(request, id_gruppo):
 
 
 # DELETE
+
+@login_required(login_url = '/login/')
+def delete_settimana_view(request, id_settimana):
+	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+		settimana = Settimana.objects.get(id = id_settimana)
+		settimana.delete()
+		messages.success(request, "<h4>Cancellata</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/recuperi/")
+	else:
+		raise Http404
+
+@login_required(login_url = '/login/')
+def delete_turno_view(request, id_turno):
+	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+		turno = Turno.objects.get(id = id_turno)
+		id_giorno = turno.giorno.id
+		turno.delete()
+		messages.success(request, "<h4>Cancellato</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/recuperi/" + str(id_giorno) + "/")
+	else:
+		raise Http404
+
+@login_required(login_url = '/login/')
+def delete_gruppo_view(request, id_gruppo):
+	if request.user.studente.is_rappr_istituto or request.user.is_superuser:
+		gruppo = Gruppo.objects.get(id = id_gruppo)
+		id_turno = gruppo.turno.id
+		gruppo.delete()
+		messages.success(request, "<h4>Cancellato</h4>", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/recuperi/scegli_gruppo/" + str(id_turno) + "/")
+	else:
+		raise Http404
 
 
 # ISCRITTI

@@ -25,12 +25,8 @@ def query_turni(giorno, *args, **kwargs):
 		turni = []
 		for turno in Turno.objects.filter(giorno = giorno).order_by('ora'):
 			turni.append(turno)
-			print("Ciclo for, lunghezza turni: " + str(len(turni)))
-
-		print("Finito for, lunghezza turni: " + str(len(turni)))
 
 		if not index + 1 > len(turni):
-			print("Indice maggiore del numero di turni")
 			return turni[int(index)]
 		else:
 			return False

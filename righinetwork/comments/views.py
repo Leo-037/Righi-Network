@@ -51,7 +51,6 @@ def comment_thread(request, id):
 	try:
 		post = Post.objects.get(id = obj.object_id)
 	except:
-		print("OOOps")
 		raise Http404
 
 
