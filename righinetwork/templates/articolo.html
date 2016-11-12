@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+{% block content %}
+<div class="row">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/times/">Righi Times</a></li>
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/times/{{ articolo.issue.slug }}">{{ articolo.issue.data }}</a></li>
+        <li class="breadcrumb-item active">{{ articolo.titolo }}</li>
+    </ol>
+</div>
+<div class="col-md-10 col-md-offset-1">
+    <div class="row">
+            <h1 class="text-center text-primary">{{ articolo.titolo }} <small>di {{ articolo.autore }}</small></h1>
+        <hr>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+            <div class="btn-group btn-group-justified" role="group">
+                <a href="update/" class="btn btn-warning btn-block" role="button">Modifica articolo</a>
+                <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina articolo</a>
+            </div>
+            <hr>
+        {% endif %}
+        <!--{% if user.studente.is_rappr_istituto or user.is_superuser %}-->
+            <!--<a href="{{ BASE_DIR }}/times/{{ issue.slug }}/aggiungi_articolo/" class="btn btn-primary btn-block" role="button">Aggiungi articolo</a>-->
+            <!--<hr>-->
+        <!--{% endif %}-->
+        {% if articolo.contenuto %}
+            <iframe src="{{ articolo.contenuto.url }}" width="100%" style="height: 100vh;" frameborder="0"></iframe>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+
+{% block content %}
+<div class="row">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/times/">Righi Times</a></li>
+        <li class="breadcrumb-item active">{{ issue.data }}</li>
+    </ol>
+</div>
+<div class="col-md-10 col-md-offset-1">
+    <div class="row">
+        <h1 class="text-center text-primary">Righi Times - numero del {{ issue.data }}</h1>
+        <hr>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+            <div class="btn-group btn-group-justified" role="group">
+                <a href="{{ BASE_DIR }}/times/{{ issue.slug }}/aggiungi_articolo/" class="btn btn-primary btn-block" role="button">Aggiungi articolo</a>
+                <a href="update/" class="btn btn-warning btn-block" role="button">Modifica numero</a>
+                <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina numero</a>
+            </div>
+            <hr>
+        {% endif %}
+    </div>
+    <div class="col-md-12">
+        <ul class="list-group">
+            {% for articolo in articoli %}
+                <h3><li class="list-group-item"><a href="{{ BASE_DIR }}/times/{{ issue.slug }}/articolo/{{ articolo.slug }}">{{ articolo.titolo }} </a><small>    di {{ articolo.autore }}</small></li></h3>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock content %}

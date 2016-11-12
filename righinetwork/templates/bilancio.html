@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load chartit %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+{% block head_extra %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/2.2.0/highcharts.min.js"></script>
+{% endblock head_extra%}
+
+{% block content %}
+<div class="row">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+        <li class="breadcrumb-item active">Bilancio</li>
+    </ol>
+</div>
+<div class="col-md-10 col-md-offset-1">
+    <div class="row">
+        <h1 class="text-center text-primary">Bilancio Fondo Studentesco</h1>
+        <hr>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+            <a href="aggiorna/" class="btn btn-primary btn-block" role="button">Aggiorna bilancio</a>
+            <hr>
+        {% endif %}
+        <div id='container'>{{ chart|load_charts:"container" }}</div>
+    <hr/>
+    </div>
+    <div class="row">
+    {% for data in date %}
+        <div class="col-md-12">
+            <blockquote>
+                <p class="text-primary">{{ data.data }}: {{ data.bilancio }}&euro;{% if user.studente.is_rappr_istituto or user.is_superuser %}  |  <a href="{{ data.id }}/update/">Modifica</a> - <a href="{{ data.id }}/delete/">Elimina</a>{% endif %}</p>
+                <footer>{{ data.descrizione }}</footer>
+            </blockquote>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock content %}

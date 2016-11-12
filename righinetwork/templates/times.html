@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+{{ title }}
+{% endblock head_title %}
+
+
+{% block content %}
+<div class="row">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+        <li class="breadcrumb-item active">Righi Times</li>
+    </ol>
+</div>
+<div class="col-md-10 col-md-offset-1">
+    <div class="row">
+        <h1 class="text-center text-primary">Righi Times</h1>
+        <hr>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+            <a href="{{ BASE_DIR }}/times/aggiungi_numero/" class="btn btn-primary btn-block" role="button">Aggiungi numero Righi Times</a>
+            <hr>
+        {% endif %}
+        <div class="col-md-12">
+            {% for issue in issues %}
+                <div class="well">
+                    <h2><a href="{{ BASE_DIR }}/times/{{ issue.slug }}">Numero del {{ issue.data }}</a><br></h2>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
