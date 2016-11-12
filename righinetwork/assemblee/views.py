@@ -52,7 +52,7 @@ def create_turno_view(request, id_assemblea, n_turni):
 			int(n_turni)
 			if int(n_turni) > 1:
 				return HttpResponseRedirect(
-					"/assemblee/aggiungi_turno/" + str(assemblea.id) + "/" + str(n_turni - 1) + "/")
+					"/assemblee/aggiungi_turno/" + str(assemblea.id) + "/" + str(int(n_turni) - 1) + "/")
 			else:
 				return HttpResponseRedirect("/assemblee/" + str(assemblea.id) + "/")
 	else:

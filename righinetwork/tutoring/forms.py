@@ -14,7 +14,7 @@ class TutorAdminForm(forms.ModelForm):
 		materia_widget = forms.Select(choices = (
 			("latino", "Latino"),
 			("fisica", "Fisica"),
-			("matematica", "Matematica")))
+			("matematica", "Matematica"),))
 		fields = ['studente', 'materia', 'cellulare', 'studenti_max', 'prima', 'seconda', 'terza', 'quarta', 'quinta', 'approvato']
 		widgets = {
 			'materia': materia_widget,

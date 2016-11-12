@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
@@ -76,7 +77,7 @@ def tutor_form_view(request):
 		              prima = prima,
 		              seconda = seconda, terza = terza, quarta = quarta, quinta = quinta)
 		tutor.save()
-		messages.success(request, "Richiesta inviata. Verrà approvata il più presto possibile",
+		messages.success(request, "Richiesta inviata. Verrà  approvata il più presto possibile",
 		                 extra_tags = 'html_safe')
 
 		return HttpResponseRedirect("/tutoring/")
@@ -108,5 +109,17 @@ def elimina_tutor(request, id_tutor):
 @login_required(login_url = '/login/')
 def richiedi_tutor(request, id_tutor):
 	tutor = Tutor.objects.get(id = id_tutor)
+	studente = request.user.studente
+	if len(Allievo.objects.filter(tutor = tutor, studente = studente)) > 0:
+		messages.success(request, "Hai già inviato una richiesta a questo tutor.", extra_tags = 'html_safe')
+		return HttpResponseRedirect("/tutoring/")
+	else:
+		allievo = Allievo(tutor = tutor, studente = studente)
+		allievo.save()
+		send_mail('Tutoring',
+		          """L'alunno {0} di classe {1}^{2} ha chiesto il tutoring in {3}. \nPer contattarlo, questo è il suo indirizzo email: {4}""".format(
+			          studente.nome + " " + studente.cognome, str(studente.classe), studente.sezione, tutor.materia,
+			          studente.user.email), 'RighiNetwork <noreply.righinetwork@gmail.com>',
+		          [tutor.studente.user.email])
 
-	return HttpResponseRedirect("/tutoring/")
+		return HttpResponseRedirect("/tutoring/")

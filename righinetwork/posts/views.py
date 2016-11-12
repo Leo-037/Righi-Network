@@ -14,6 +14,9 @@ from django.utils import timezone
 from .forms import PostForm
 from .models import Post
 
+@login_required(login_url = '/login/')
+def redirect(request):
+	return HttpResponseRedirect("/")
 
 @login_required(login_url = '/login/')
 def post_create(request):
@@ -146,4 +149,4 @@ def post_delete(request, slug = None):
 	instance = get_object_or_404(Post, slug = slug)
 	instance.delete()
 	messages.success(request, "Cancellato")
-	return redirect("posts:list")
+	return HttpResponseRedirect("/")

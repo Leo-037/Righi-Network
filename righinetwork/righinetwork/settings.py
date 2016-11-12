@@ -1,5 +1,5 @@
 import os
-import private_settings
+from . import private_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -12,7 +12,7 @@ SECRET_KEY = private_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['52.57.142.73', ' 127.0.0.1']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
@@ -31,17 +31,19 @@ INSTALLED_APPS = [
 	# 'allauth.socialaccount',
 	'bootstrap_themes',
 	'crispy_forms',
-	'crudbuilder',
 	'django_bootstrap_breadcrumbs',
+	'chartit',
 	'django_tables2',
 	'markdown_deux',
 	'pagedown',
 
 	'accounts',
 	'assemblee',
+	'bilancio',
 	'comments',
 	'posts',
 	'recuperi',
+	'times',
 	'tutoring',
 ]
 
@@ -124,20 +126,18 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER
-# EMAIL_HOST_PASSWORD
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'noreply.righinetwork@gmail.com'
+EMAIL_HOST_PASSWORD = private_settings.EMAIL_HOST_PASSWORD
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 LANGUAGE_CODE = 'it'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -147,7 +147,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
 	os.path.join(BASE_DIR, "static"),
-	# '/var/www/static/',
+	'/home/ubuntu/righinetwork/righinetwork/static/',
 ]
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
@@ -157,9 +157,9 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
 
 # Django allauth
 
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_FORMS = {'signup': 'accounts.forms.UserRegisterForm', 'login': 'accounts.forms.UserLoginForm'}
-ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = False
-LOGIN_REDIRECT_URL = '/'
+# ACCOUNT_AUTHENTICATION_METHOD = "email"
+# ACCOUNT_EMAIL_REQUIRED = True
+# # ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# ACCOUNT_FORMS = {'signup': 'accounts.forms.UserRegisterForm', 'login': 'accounts.forms.UserLoginForm'}
+# ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = False
+# LOGIN_REDIRECT_URL = '/'

@@ -24,16 +24,15 @@ Assemblee
         <hr>
         {% endif %}
         {% if assemblee_correnti|length > 0 %}
-            {% for assemblea in assemblee_correnti %}
-
-                    <div class="col-md-12">
-                        <div class="well">
-                            <a href="/assemblee/{{ assemblea.id }}">
-                                <h2 class="text-primary">{{ assemblea.data_assemblea }}</a><small>{{ assemblea.sede }}</small></h2>
-                            <p class="lead text-muted"></p>
-                        </div>
+            <div class="col-md-12">
+                {% for assemblea in assemblee_correnti %}
+                    <div class="well">
+                        <a href="/assemblee/{{ assemblea.id }}">
+                            <h2 class="text-primary">{{ assemblea.data_assemblea }}</a><small>{{ assemblea.sede }}</small></h2>
+                        <p class="lead text-muted"></p>
                     </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         {% else %}
             <h2 class="text-center text-warning"><i>Non ci sono assemblee</i></h2>
         {% endif %}

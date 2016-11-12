@@ -26,6 +26,11 @@ class Tutor(models.Model):
 	cellulare = models.CharField(validators = [phone_regex], verbose_name = "Numero di cellulare", max_length=15)
 
 
+class Allievo(models.Model):
+	tutor = models.ForeignKey(Tutor)
+	studente = models.ForeignKey(Studente)
+
+
 class TutorForm(ModelForm):
 	class Meta:
 		model = Tutor

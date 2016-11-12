@@ -1,4 +1,3 @@
-{% load bootstrap_themes %}
 {% load crispy_forms_tags %}
 {% load static %}
 
@@ -9,20 +8,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block head_title %}{% endblock head_title %}</title>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+    <!--<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+    <!--<script src="{% static 'js/bootstrap-confirmation.js' %}"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+    <!--<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"-->
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="{% static 'js/bootstrap-confirmation.js' %}"></script>
-    <script type="text/javascript" src="/admin/jsi18n/"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
-          type="text/css">
-    <!--<link href="{% static 'css/base_bianco_blu.css' %}" rel="stylesheet" type="text/css">-->
-    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
-
-    <!-- cosmo, cyborg, darkly, flatly, lumen, paper, simplex, spacelab, yeti-->
-    <!--{% bootstrap_styles theme='lumen' type='min.css' %}-->
-    <!--{% bootstrap_styles theme='lumen' type='css' %}-->
-    <!--{% bootstrap_styles theme='lumen' type='less' %}-->
-    <!--{% bootstrap_script use_min=True %}-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+    rel="stylesheet" type="text/css">
+    <!--<link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css"-->
+    <!--rel="stylesheet" type="text/css">-->
     <style>
         {% block style %}{% endblock style %}
     </style>
@@ -63,7 +60,6 @@
                 {% if user.is_superuser %}
                 <li><a href="{{ BASE_DIR }}/admin/">Admin</a></li>
                 {% endif %}
-
             </ul>
             <ul class="nav navbar-left navbar-nav">
                 <li class="active"><a href="{{ BASE_DIR }}/">Home</a></li>
@@ -81,13 +77,16 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ BASE_DIR }}/recuperi">Settimana dei recuperi<br></a>
+                    <a href="{{ BASE_DIR }}/recuperi/">Settimana dei recuperi<br></a>
+                </li>
+                <li>
+                    <a href="{{ BASE_DIR }}/times/">Righi Times<br></a>
+                </li>
+                <li>
+                    <a href="{{ BASE_URL }}/bilancio/">Bilancio<br></a>
                 </li>
                 <li>
                     <a href="#">Righi di sangue<br></a>
-                </li>
-                <li>
-                    <a href="#">Righi Times<br></a>
                 </li>
             </ul>
         </div>
@@ -99,9 +98,9 @@
     {% endblock content %}
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js'></script>
 
 <script src="{% static 'js/bootstrap-confirmation.js' %}"></script>
 

@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
-from comments.models import Comment
+import datetime
+
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
@@ -11,15 +12,9 @@ from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 from markdown_deux import markdown
 
+from comments.models import Comment
 from .utils import get_read_time
 
-
-# Create your models here.
-# MVC MODEL VIEW CONTROLLER
-
-
-# Post.objects.all()
-# Post.objects.create(user=user, title="Some time")
 
 class PostManager(models.Manager):
 	def active(self, *args, **kwargs):
@@ -35,24 +30,25 @@ def upload_location(instance, filename):
 		new_id = PostModel.objects.order_by("id").last().id + 1
 	except:
 		new_id = 1
-	return "%s/%s" % (new_id, filename)
+	return "posts/%s/%s" % (new_id, filename)
 
 
 class Post(models.Model):
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, default = 1)
-	title = models.CharField(max_length = 120)
+	title = models.CharField("Titolo", max_length = 120)
 	slug = models.SlugField(unique = True)
-	image = models.ImageField(upload_to = upload_location,
+	image = models.ImageField("Immagine", upload_to = upload_location,
 	                          null = True,
 	                          blank = True,
 	                          width_field = "width_field",
 	                          height_field = "height_field")
 	height_field = models.IntegerField(default = 0)
 	width_field = models.IntegerField(default = 0)
-	content = models.TextField()
-	draft = models.BooleanField(default = False)
-	publish = models.DateField(auto_now = False, auto_now_add = False)
-	read_time = models.IntegerField(default = 0)  # models.TimeField(null=True, blank=True)
+	content = models.TextField("Contenuto")
+	draft = models.BooleanField("Bozza", default = False)
+	publish = models.DateField("Data di pubblicazione", auto_now = False, auto_now_add = False,
+	                           default = datetime.date.today)
+	read_time = models.IntegerField("Tempo di lettura", default = 0)  # models.TimeField(null=True, blank=True)
 	updated = models.DateTimeField(auto_now = True, auto_now_add = False)
 	timestamp = models.DateTimeField(auto_now = False, auto_now_add = True)
 

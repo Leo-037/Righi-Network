@@ -13,18 +13,18 @@
 
 {% block content %}
 <div class="row">
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
-    {% if recuperi == "true" %}
-        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/">Settimana dei recuperi</a></li>
-        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/scegli_gruppo/{{ gruppo.turno.id }}">{{ gruppo.turno.ora }} - {{ gruppo.turno.orario_fine }}</a></li>
-    {% else %}
-        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
-        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ gruppo.turno.assemblea.id }}">{{ gruppo.turno.assemblea.data_assemblea }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ gruppo.turno.assemblea.id }}/{{ gruppo.turno.id }}/">{{ gruppo.turno.ora }}</a></li>
-    {% endif %}
-    <li class="breadcrumb-item active">Iscritti</li>
-</ol>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+        {% if recuperi == "true" %}
+            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/">Settimana dei recuperi</a></li>
+            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/scegli_gruppo/{{ gruppo.turno.id }}">{{ gruppo.turno.ora }} - {{ gruppo.turno.orario_fine }}</a></li>
+        {% else %}
+            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ gruppo.turno.assemblea.id }}">{{ gruppo.turno.assemblea.data_assemblea }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ gruppo.turno.assemblea.id }}/{{ gruppo.turno.id }}/">{{ gruppo.turno.ora }}</a></li>
+        {% endif %}
+        <li class="breadcrumb-item active">Iscritti</li>
+    </ol>
 </div>
 
 <div class="row">

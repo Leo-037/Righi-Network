@@ -14,4 +14,5 @@ class Studente(models.Model):
 
 	is_rappr_classe = models.BooleanField(default = False)
 	is_rappr_istituto = models.BooleanField(default = False)
+	is_caporedattore = models.BooleanField(default = False)
 

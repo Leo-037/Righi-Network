@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-{% load static %}
 
 {% block head_extra %}
 {{ form.media }}
@@ -8,21 +7,23 @@
 
 
 {% block content %}
-<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
-    <h1 class="text-primary">Anteprima</h1>
-    <hr/>
-    <div class='content-preview'>
-        <h3 id='preview-title'></h3>
-        <p id='preview-content'></p>
+<div class="row">
+    <div class='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+        <h1 class="text-primary">Anteprima</h1>
+        <hr/>
+        <div class='content-preview'>
+            <h3 id='preview-title'></h3>
+            <p id='preview-content'></p>
+        </div>
     </div>
-</div>
-<div class='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
-    <h1 class="text-primary">Form</h1>
-    <hr/>
-    <form method='POST' action='' enctype='multipart/form-data'>
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type='submit' class='btn btn-primary' value='Aggiungi Post'/>
-    </form>
+    <div class='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+        <h1 class="text-primary">Form</h1>
+        <hr/>
+        <form method='POST' action='' enctype='multipart/form-data'>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type='submit' class='btn btn-primary' value='Aggiungi Post'/>
+        </form>
+    </div>
 </div>
 {% endblock content %}
