@@ -1,0 +1,166 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+<html>
+<head>
+    <link rel="icon" href="">
+    <meta charset="utf-8">
+	<meta name="google-site-verification" content="gENjkWYKmdTTPAOzdN7VMizwWe8z5KZ400455EPYj1U" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block head_title %}{% endblock head_title %}</title>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+    rel="stylesheet" type="text/css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/sticky-footer.css' %}" rel="stylesheet">
+    <style>
+        {% block style %}{% endblock style %}
+    </style>
+    {% block head_extra %} {% endblock head_extra %}
+</head>
+<body>
+
+{% include "messages_display.html" %}
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ BASE_DIR }}/">Righi-Network</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i
+                            class="fa fa-caret-down"></i> {{ user.studente.nome }}</a>
+                    <ul class="dropdown-menu" role="menu">
+                        <!--<li>-->
+                            <!--<a href="{{ BASE_DIR }}/user-settings/">Impostazioni</a>-->
+                        <!--</li>-->
+                        <!--<li class="divider"></li>-->
+                        <li><a href="{{ BASE_DIR }}/logout/">Esci</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li><a href="{{ BASE_DIR }}/login/">Log In</a></li>
+                {% endif %}
+                {% if user.is_superuser %}
+                <li><a href="{{ BASE_DIR }}/admin/">Admin</a></li>
+                {% endif %}
+                {% if user.studente.is_rappr_istituto or user.is_superuser %}
+                <li><a href="{{ BASE_DIR }}/gestione/">Gestione</a></li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-left navbar-nav">
+                <li class="active"><a href="{{ BASE_DIR }}/">Home</a></li>
+                <li><a href="{{ BASE_DIR }}/assemblee">Assemblee</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-expanded="false"><i class="fa fa-caret-down"></i> Tutoring</a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="{{ BASE_DIR }}/tutoring/">Lista Tutor</a>
+                        </li>
+                        <li>
+                            <a href="{{ BASE_DIR }}/tutoring/diventa-tutor">Proponi tutoring</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{{ BASE_DIR }}/recuperi/">Settimana dei recuperi<br></a>
+                </li>
+                <li>
+                    <a href="{{ BASE_DIR }}/times/">Righi Times<br></a>
+                </li>
+                <li>
+                    <a href="{{ BASE_URL }}/bilancio/">Bilancio<br></a>
+                </li>
+                <li>
+                    <a href="#">Righi di sangue<br></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container">
+
+    {% block content %}
+    {% endblock content %}
+</div>
+<!--<div class="hidden-xs hidden-sm">-->
+    <!--<footer class="footer">-->
+        <!--<div class="container">-->
+            <!--<h4 class="text-primary text-center">Sviluppato da Leonardo Baraldi</h4>-->
+        <!--</div>-->
+    <!--</footer>-->
+<!--</div>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js'></script>
+
+<script src="{% static 'js/bootstrap-confirmation.js' %}"></script>
+
+<script type="text/javascript">
+$(document).on('click', '.confirm-delete', function(){
+    return confirm('Sei sicuro di volerlo cancellare?');
+})
+
+$(document).ready(function(){
+	$(".content-markdown").each(function(){
+			var content = $(this).text()
+			var markedContent = marked(content)
+			$(this).html(markedContent)
+	})
+	$(".post-detail-item img").each(function(){
+			$(this).addClass("img-responsive")
+	})
+
+	var contentInput = $("#id_content");
+
+	function setContent(value){
+		var markedContent = marked(value)
+		$("#preview-content").html(markedContent)
+		$("#preview-content img").each(function(){
+			$(this).addClass("img-responsive")
+		})
+	}
+	setContent(contentInput.val())
+
+	contentInput.keyup(function(){
+		var newContent = $(this).val()
+		setContent(newContent)
+	})
+
+	var titleInput = $("#id_title");
+
+	function setTitle(value) {
+		$("#preview-title").text(value)
+	}
+
+	setTitle(titleInput.val())
+
+	titleInput.keyup(function(){
+		var newContent = $(this).val()
+		setTitle(newContent)
+	})
+
+	$(".comment-reply-btn").click(function(event){
+		event.preventDefault();
+		$(this).parent().next(".comment-reply").fadeToggle();
+	})
+
+
+})
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_title %}
+Assemblea {{ assemblea.data_assemblea }}
+{% endblock head_title %}
+
+{% block head_extra %}
+{% endblock head_extra %}
+
+{% block content %}
+<div class="row">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+        <li class="breadcrumb-item active">{{ assemblea.data_assemblea }}</li>
+    </ol>
+</div>
+<div class="col-md-10 col-md-offset-1">
+    <div class="row">
+        <h1 class="text-center text-primary">Assemblea del {{ assemblea.data_assemblea }}</h1>
+        <hr>
+        {% if user.studente.is_rappr_istituto or user.is_superuser %}
+        <div class="btn-group btn-group-justified" role="group">
+            <a href="{{ BASE_DIR }}/assemblee/aggiungi_turno/{{ assemblea.id }}/1/" class="btn btn-primary btn-block" role="button">Aggiungi turno</a>
+            <a href="update/" class="btn btn-warning btn-block" role="button">Modifica assemblea</a>
+            <a href="delete/" class="<a ... onclick="return confirm('Are you sure you want to delete this?')"btn btn-danger btn-block" role="button">Elimina assemblea</a>
+</div>
+ <hr>
+        {% endif %}
+        {% for turno in turni %}
+            <div class="col-md-12">
+                <div class="well">
+                    <a href="./{{ turno.id}}"><h2 class="text-primary">{{ forloop.counter }}° Turno</a> <small>dalle {{ turno.ora }} alle {{ turno.orario_fine }}</small></h2>
+                    <p class="lead text-muted"></p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

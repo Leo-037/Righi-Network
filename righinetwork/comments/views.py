@@ -10,9 +10,6 @@ from .forms import CommentForm
 from .models import Comment
 
 
-
-# Create your views here.
-
 @login_required(login_url = '/login/')
 def comment_delete(request, id):
 	# obj = get_object_or_404(Comment, id=id)

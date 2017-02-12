@@ -22,7 +22,7 @@
         {% if user.studente.is_rappr_istituto or user.is_superuser %}
             <div class="btn-group btn-group-justified" role="group">
                 <a href="update/" class="btn btn-warning btn-block" role="button">Modifica articolo</a>
-                <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina articolo</a>
+                <a href="delete/" class="btn btn-danger btn-block confirm-delete" role="button">Elimina articolo</a>
             </div>
             <hr>
         {% endif %}

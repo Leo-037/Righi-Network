@@ -33,7 +33,7 @@
     {% for data in date %}
         <div class="col-md-12">
             <blockquote>
-                <p class="text-primary">{{ data.data }}: {{ data.bilancio }}&euro;{% if user.studente.is_rappr_istituto or user.is_superuser %}  |  <a href="{{ data.id }}/update/">Modifica</a> - <a href="{{ data.id }}/delete/">Elimina</a>{% endif %}</p>
+                <p class="text-primary">{{ data.data }}: {{ data.bilancio }}&euro;{% if user.studente.is_rappr_istituto or user.is_superuser %}  |  <a href="{{ data.id }}/update/">Modifica</a> - <a href="{{ data.id }}/delete/" class="confirm-delete">Elimina</a>{% endif %}</p>
                 <footer>{{ data.descrizione }}</footer>
             </blockquote>
         </div>

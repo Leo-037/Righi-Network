@@ -3,6 +3,7 @@ from django.db import models
 
 from .custom_models import IntegerRangeField, UpperCharField
 
+
 class Studente(models.Model):
 	user = models.OneToOneField(User, on_delete = models.CASCADE)
 
@@ -16,3 +17,5 @@ class Studente(models.Model):
 	is_rappr_istituto = models.BooleanField(default = False)
 	is_caporedattore = models.BooleanField(default = False)
 
+	is_attivato = models.BooleanField(default = False)
+	password = models.CharField(max_length = 10, blank = True)

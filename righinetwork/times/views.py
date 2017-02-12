@@ -49,6 +49,8 @@ def aggiungi_articolo_view(request, slug = None):
 
 @login_required(login_url = '/login/')
 def times_view(request):  # mostra numeri righitimes
+	if not request.user.studente.is_attivato:
+		raise Http404
 	title = "Righi Times"
 	today = time.strftime("%Y-%m-%d")
 	issues = Issue.objects.filter().order_by('-data')
@@ -61,6 +63,8 @@ def times_view(request):  # mostra numeri righitimes
 
 @login_required(login_url = '/login/')
 def issue_view(request, slug = None):  # mostra articoli in un numero
+	if not request.user.studente.is_attivato:
+		raise Http404
 	issue = get_object_or_404(Issue, slug = slug)
 	articoli = Article.objects.filter(issue = issue)
 	context = {'issue': issue,
@@ -71,6 +75,8 @@ def issue_view(request, slug = None):  # mostra articoli in un numero
 
 @login_required(login_url = '/login/')
 def articolo_view(request, slug = None):  # mostra un articolo
+	if not request.user.studente.is_attivato:
+		raise Http404
 	articolo = get_object_or_404(Article, slug = slug)
 	issue = Issue.objects.get(id = articolo.issue.id)
 

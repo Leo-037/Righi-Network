@@ -14,7 +14,7 @@
 </div>
 
 <div class="col-md-10 col-md-offset-1">
-{% if user.studente.is_rappr_istituto and tutori_da_approvare|length > 0 %}
+{% if user.studente.is_rappr_istituto or user.is_superuser and tutori_da_approvare|length > 0 %}
 <div class="row">
 <h1 class="text-center text-primary">Approva Tutor</h1>
 	<div class="col-md-12 table-responsive">
@@ -42,15 +42,8 @@
 						<td>{{ tutor.cellulare }}</td>
 						<td>{% if tutor.prima %}1^ {%endif %}{% if tutor.seconda %}2^ {%endif %}{% if tutor.terza %}3^ {%endif %}{% if tutor.quarta %}4^ {%endif %}{% if tutor.quinta %}5^ {%endif %}</td>
 						<td>
-							<a class="btn btn-success" role="button"
-							   href="{{ BASE_DIR }}/tutoring/approva-tutoring/{{ tutor.id }}">Approva</a>
-							<a class="btn btn-danger" data-placement="top"
-							   data-btn-ok-label="Continue" data-btn-ok-icon="glyphicon glyphicon-share-alt"
-							   data-btn-ok-class="btn-success"
-							   data-btn-cancel-label="Stoooop!" data-btn-cancel-icon="glyphicon glyphicon-ban-circle"
-							   data-btn-cancel-class="btn-danger"
-							   data-title="Attenzione" data-content="Sicuro di voler respingere questa proposta?"
-							   href="{{ BASE_DIR }}/tutoring/elimina-tutor/{{ tutor.id }}">Respingi</a>
+							<a class="btn btn-success" role="button" href="{{ BASE_DIR }}/tutoring/approva-tutoring/{{ tutor.id }}">Approva</a>
+							<a class="btn btn-danger confirm-delete" role="button" href="{{ BASE_DIR }}/tutoring/elimina-tutor/{{ tutor.id }}">Respingi</a>
 						</td>
 					</tr>
 				{% endfor %}

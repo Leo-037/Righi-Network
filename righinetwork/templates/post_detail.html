@@ -24,7 +24,7 @@
 		{% if user.studente.is_rappr_istituto or user.is_superuser %}
 		<hr/>
 		<a href="./edit/" class="btn btn-warning btn-block" role="button">Modifica</a>
-		<a href="./delete/" class="btn btn-danger btn-block" role="button">Elimina</a>
+		<a href="./delete/" class="btn btn-danger btn-block confirm-delete" role="button">Elimina</a>
 		<hr/>
 		{% endif %}
 		{% if instance.image %}

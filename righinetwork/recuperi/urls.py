@@ -16,6 +16,7 @@ urlpatterns = [
 	url(r'^scegli_gruppo/[0-9]+/(?P<id_gruppo>[0-9]+)/delete/$', delete_gruppo_view),
 	url(r'^(?P<id_settimana>[0-9]+)/delete/$', delete_settimana_view),
 	url(r'^[0-9]+/[0-9]+/[0-9]+/(?P<id_gruppo>[0-9]+)/iscritti/$', iscritti_view),
-	url(r'^(?P<id_settimana>[0-9]+)/(?P<id_giorno>[0-9]+)/(?P<id_turno>[0-9]+)/(?P<id_gruppo>[0-9]+)/iscrizione/$', iscrizione_view),
-	url(r'^(?P<id_settimana>[0-9]+)/(?P<id_giorno>[0-9]+)/(?P<id_turno>[0-9]+)/(?P<id_gruppo>[0-9]+)/disiscrizione/$', disiscrizione_view),
+	url(r'^[0-9]+/[0-9]+/[0-9]+/(?P<id_gruppo>[0-9]+)/iscritti/stampa/$', pdf_iscritti_view),
+#	url(r'^(?P<id_settimana>[0-9]+)/(?P<id_giorno>[0-9]+)/(?P<id_turno>[0-9]+)/(?P<id_gruppo>[0-9]+)/iscrizione/$', iscrizione_view),
+#	url(r'^(?P<id_settimana>[0-9]+)/(?P<id_giorno>[0-9]+)/(?P<id_turno>[0-9]+)/(?P<id_gruppo>[0-9]+)/disiscrizione/$', disiscrizione_view),
 ]

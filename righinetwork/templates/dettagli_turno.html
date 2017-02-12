@@ -7,106 +7,147 @@
 {% endblock head_title %}
 
 {% block head_extra %}
-<!--<link href="{% static 'css/dettagli_turno.css' %}" rel="stylesheet" type="text/css">-->
+{% if user.studente.is_rappr_istituto or user.is_superuser %}
+{% if recuperi == "true" %}
+<link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css"
+    rel="stylesheet" type="text/css">
+{% endif %}
+{% endif %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.9/select2-bootstrap.css" />
 {% endblock head_extra %}
 
-{% block content %}
 
+{% block content %}
 <div class="row">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
-        {% if recuperi == "true" %}
-            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/">Settimana dei recuperi</a></li>
-            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/{{ turno.giorno.id }}">{{ turno.giorno.nome }} {{ turno.giorno.data }}</a></li>
-        {% else %}
-            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
-            <li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ turno.assemblea.id }}">{{ turno.assemblea.data_assemblea }}</a></li>
-        {% endif %}
-        <li class="breadcrumb-item active">{{ turno.ora }} - {{ turno.orario_fine }}</li>
-    </ol>
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/">Home</a></li>
+		{% if recuperi == "true" %}
+			<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/">Settimana dei recuperi</a></li>
+			<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/recuperi/{{ turno.giorno.id }}">{{ turno.giorno.nome }} {{ turno.giorno.data }}</a></li>
+		{% else %}
+			<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/">Assemblee</a></li>
+			<li class="breadcrumb-item"><a href="{{ BASE_DIR }}/assemblee/{{ turno.assemblea.id }}">{{ turno.assemblea.data_assemblea }}</a></li>
+		{% endif %}
+		<li class="breadcrumb-item active">{{ turno.ora }} - {{ turno.orario_fine }}</li>
+	</ol>
 </div>
 <div class="col-md-10 col-md-offset-1">
-    <div class="row">
-        {% if recuperi == "true" %}
-            <h1 class="text-center text-primary">Gruppi di {{ turno.giorno.nome }} - ore {{ turno.ora }} / {{ turno.orario_fine }}</h1>
-            <hr>
-            {% if user.studente.is_rappr_istituto or user.is_superuser %}
-                <div class="btn-group btn-group-justified" role="group">
-                    <a href="{{ BASE_DIR }}/recuperi/aggiungi_gruppo/{{ turno.id }}/" class="btn btn-primary btn-block" role="button">Aggiungi gruppo</a>
-                    <a href="update/" class="btn btn-warning btn-block" role="button">Modifica turno</a>
-                    <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina turno</a>
-                </div>
-                <hr>
-            {% endif %}
-        {% else %}
-            <h1 class="text-center text-primary">Gruppi delle {{ turno.ora }} - {{ turno.orario_fine }}</h1>
-            <hr>
-            {% if user.studente.is_rappr_istituto or user.is_superuser %}
-                <div class="btn-group btn-group-justified" role="group">
-                    <a href="{{ BASE_DIR }}/assemblee/aggiungi_gruppo/{{ turno.id }}/" class="btn btn-primary btn-block" role="button">Aggiungi gruppo</a>
-                    <a href="update/" class="btn btn-warning btn-block" role="button">Modifica turno</a>
-                    <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina turno</a>
-                </div>
-                <hr>
-            {% endif %}
-        {% endif %}
+	<div class="row">
+		{% if recuperi == "true" %}
+			<h1 class="text-center text-primary">Gruppi di {{ turno.giorno.nome }} - ore {{ turno.ora }} / {{ turno.orario_fine }}</h1>
+			<hr>
+			{% if user.studente.is_rappr_istituto or user.is_superuser %}
+				<div class="btn-group btn-group-justified" role="group">
+					<a href="{{ BASE_DIR }}/recuperi/aggiungi_gruppo/{{ turno.id }}/" class="btn btn-primary btn-block" role="button">Aggiungi gruppo</a>
+					<a href="update/" class="btn btn-warning btn-block" role="button">Modifica turno</a>
+					<a href="delete/" class="confirm-delete btn btn-danger btn-block confirm-delete" role="button">Elimina turno</a>
+				</div>
+			<hr>
+			{% endif %}
+		{% else %}
+			<h1 class="text-center text-primary">Gruppi delle {{ turno.ora }} - {{ turno.orario_fine }}</h1>
+			<hr>
+			{% if user.studente.is_rappr_istituto or user.is_superuser %}
+				<div class="btn-group btn-group-justified" role="group">
+					<a href="{{ BASE_DIR }}/assemblee/aggiungi_gruppo/{{ turno.id }}/" class="btn btn-primary btn-block" role="button">Aggiungi gruppo</a>
+					<a href="update/" class="btn btn-warning btn-block" role="button">Modifica turno</a>
+					<a href="delete/" class="confirm-delete btn btn-danger btn-block confirm-delete" role="button">Elimina turno</a>
+				</div>
+				<hr>
+			{% endif %}
+		{% endif %}
 
-        {% for gruppo in gruppi %}
-            {% if not gruppo.recupero or user.studente.is_rappr_istituto or user.is_superuser %}
-                <div class="col-md-12 text-left">
-                    <div class="well">
-                        {% if user.studente.is_rappr_istituto or user.is_superuser %}
-                            <div class="btn-group btn-group-justified" role="group">
-                                <a href="{{ gruppo.id }}/update/" class="btn btn-warning btn-block" role="button">Modifica gruppo</a>
-                                <a href="{{ gruppo.id }}/delete/" class="btn btn-danger btn-block" role="button">Elimina gruppo</a>
-                            </div>
-                        {% endif %}
-                        <h2 class="{% if gruppo.recupero %}text-danger{% else %}text-primary{% endif %}">{{ gruppo.titolo }} <small>{{ gruppo.aula }}</small></h2>
-                        <p class="lead text-info">Tenuto da {{ gruppo.host }}</p>
-                        <p class="lead text-muted">{{ gruppo.descrizione }}</p>
-                        {% if not gruppo.recupero %}
-                            {% if mostra_iscrizione == False %}
-                                <p class="lead text-info">{% if gruppo.iscritti == 0 %}0 / {{ gruppo.iscritti_massimi }} iscritti
-                            {% else %}
-                                {% if recuperi == "true" %}
-                                    <a href="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">
-                                {% else %}
-                                    <a href="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">
-                                {% endif %}
-                                    {{ gruppo.iscritti }} / {{ gruppo.iscritti_massimi }} iscritti</a>
-                            {% endif %}</p>
+		<form method="GET" action="" class="row">
+			<div class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+				<div class="input-group">
+					<input class="form-control" type="text" name="q" placeholder="Cerca gruppo per titolo, sede, aula, ecc..." value="{{ request.GET.q }}">
+					<span class="input-group-btn">
+				  <!-- <input class='btn btn-default' type='submit' value='Search' />-->
+				  <button class="btn btn-primary" type="submit">Cerca <i class="fa fa-search"></i></button>
+				</span>
+				</div>
+			</div>
+		</form>
 
-                            {% if not gruppo_iscritto.recupero %}
-                                {% if gruppo_iscritto == gruppo %}
-                                    {% if recuperi == "true" %}
-                                        <form method="POST" action="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
-                                    {% else %}
-                                        <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
-                                    {% endif %}
-                                        {% csrf_token %}
-                                        <input type="submit" class="btn btn-warning" value="Disiscriviti">
-                                    </form>
-                                {% else %}
-                                    {% if gruppo.iscritti == gruppo.iscritti_massimi %}
-                                        <p class="lead text-danger">Gruppo pieno</p>
-                                    {% else %}
-                                        {% if recuperi == "true" %}
-                                            <form method="POST" action="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
-                                        {% else %}
-                                            <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
-                                        {% endif %}
-                                            {% csrf_token %}
-                                            <input type="submit" class="btn btn-primary" value="Iscriviti">
-                                        </form>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
+		{% for gruppo in gruppi %}
+			{% if not gruppo.recupero or user.studente.is_rappr_istituto or user.is_superuser %}
+				<div class="col-md-12 text-left">
+					<div class="well">
+						{% if user.studente.is_rappr_istituto or user.is_superuser %}
+							<div class="btn-group btn-group-justified" role="group">
+								<a href="{{ gruppo.id }}/update/" class="btn btn-warning btn-block" role="button">Modifica gruppo</a>
+								<a href="{{ gruppo.id }}/delete/" class="btn btn-danger btn-block confirm-delete" role="button">Elimina gruppo</a>
+							</div>
+						{% endif %}
+						<h2 class="{% if gruppo.recupero %}text-danger{% else %}text-primary{% endif %}">{{ gruppo.titolo }} <small>{{ gruppo.aula }}{% if recuperi == "true" %} - {{ gruppo.sede }}{% endif %}</small></h2>
+						<p class="lead text-info">Tenuto da {{ gruppo.host }}</p>
+						<p class="lead text-muted">{{ gruppo.descrizione }}</p>
+						{% if not gruppo.recupero %}
+
+								{% if gruppo.iscritti == 0 %}<p class="lead text-info">0 / {{ gruppo.iscritti_massimi }} iscritti</p>{% else %}{% if recuperi == "true" %}<a class="lead text-info" href="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">{% else %}<a class="lead text-info" href="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">{% endif %}{{ gruppo.iscritti }} / {{ gruppo.iscritti_massimi }} iscritti</a>{% endif %}
+
+
+							{% if not gruppo_iscritto.recupero %}{% if not barare %}
+								{% if gruppo_iscritto == gruppo %}
+									{% if recuperi == "true" %}
+										<form method="POST" action="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
+									{% else %}
+										<form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/disiscrizione/">
+									{% endif %}
+										{% csrf_token %}
+										<input type="submit" class="btn btn-warning" value="Disiscriviti">
+									</form>
+								{% else %}
+									{% if gruppo.iscritti == gruppo.iscritti_massimi %}
+										<p class="lead text-danger">Gruppo pieno</p>
+									{% else %}
+										{% if recuperi == "true" %}
+											<form method="POST" action="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
+										{% else %}
+										   <form method="POST" action="/assemblee/{{ turno.assemblea.id }}/{{ turno.id }}/{{ gruppo.id }}/iscrizione/">
+										{% endif %}
+										   {% csrf_token %}
+										   <input type="submit" class="btn btn-primary" value="Iscriviti">
+										   </form>
+									{% endif %}
+								{% endif %}{% endif %}
+							{% endif %}
+						{% else %}
+							{% if user.studente.is_rappr_istituto or user.is_superuser %}
+								{% if recuperi == "true" %}
+									{% if gruppo.iscritti == 0 %}<p class="lead text-info">0 / {{ gruppo.iscritti_massimi }} iscritti</p>{% else %}<a class="lead text-info" href="/recuperi/{{ turno.giorno.settimana.id }}/{{ turno.giorno.id }}/{{ turno.id }}/{{ gruppo.id }}/iscritti">{{ gruppo.iscritti }} / {{ gruppo.iscritti_massimi }} iscritti</a>{% endif %}
+									{% if gruppo.iscritti < gruppo.iscritti_massimi %}
+										<br>
+										<form method="POST">
+											<div class="select-style">
+											<select id="e{{ forloop.counter }}" name="iscritti-{{ gruppo.id }}" multiple style="width: 100%">
+												{% for studente in studenti %}
+												<option value="{{ studente.id }}">{{ studente.nome }} {{ studente.cognome }} - {{ studente.classe }}^{{ studente.sezione }}</option>
+												{% endfor %}
+											</select>
+											</div>
+											{% csrf_token %}
+											<br>
+											<input type="submit" class='btn btn-block btn-primary' value="Aggiungi studenti">
+										</form>
+										<script>
+											$('#e{{ forloop.counter }}').select2({
+												theme: "bootstrap",
+												placeholder: "Seleziona studenti",
+											});
+										</script>
+									{% endif %}
+								{% endif %}
+							{% endif %}
+						{% endif %}
+					</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+	</div>
 </div>
+
 {% endblock content %}

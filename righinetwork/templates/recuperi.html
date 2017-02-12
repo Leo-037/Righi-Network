@@ -29,10 +29,11 @@
         <hr>
         {% if user.studente.is_rappr_istituto or user.is_superuser %}
             <div class="btn-group btn-group-justified" role="group">
-                <a href="{{ settimana.id }}/delete/" class="btn btn-danger btn-block" role="button">Elimina settimana</a>
+                <a href="{{ settimana.id }}/delete/" class="btn btn-danger btn-block confirm-delete" role="button">Elimina settimana</a>
             </div>
             <hr>
         {% endif %}
+	{% if user.studente.classe == 3 %}<h4 class="text-center text-warning">Il primo gruppo di alcuni giorni è occcupato dal corso <i>obbligatorio</i> sulla sicurezza, anche se non compare in tabella</h4>{% endif %}
         <div class="col-md-12">
             <table class="table table-bordered table-responsive">
                 <thead>

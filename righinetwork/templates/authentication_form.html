@@ -20,6 +20,7 @@
             {{ form|crispy }}
             <input type='submit' class='btn btn-primary' value='{{ title }}' />
         </form>
+    <h4>Se hai già attivato il tuo account ma non ricordi la password: <a href='{% url "password_reset_recover" %}'>Cambia Password</a></h4>
     </div>
 </div>
 {% endblock content %}

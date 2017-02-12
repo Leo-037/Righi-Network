@@ -31,6 +31,8 @@ def aggiorna_bilancio_view(request):
 
 @login_required(login_url = '/login/')
 def bilancio_chart_view(request):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	title = "Bilancio"
 
 	data = DataPool(

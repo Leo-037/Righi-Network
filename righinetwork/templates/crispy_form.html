@@ -1,0 +1,33 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+<html>
+<head>
+    <link rel="icon" href="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+          rel="stylesheet" type="text/css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/sticky-footer.css' %}" rel="stylesheet">
+</head>
+<body>
+
+<div class="row">
+    <div class='col-sm-6 col-sm-offset-3'>
+        <h1 class="text-primary">{{ title }}</h1>
+        <hr/>
+        {% if link %}
+        <h4>{{ link|safe }}</h4>
+        {% endif %}
+        {% if form %}
+            {% crispy form %}
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

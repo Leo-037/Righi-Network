@@ -38,6 +38,8 @@ def post_create(request):
 
 @login_required(login_url = '/login/')
 def post_detail(request, slug = None):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	instance = get_object_or_404(Post, slug = slug)
 	if instance.publish > timezone.now().date() or instance.draft:
 		if not request.user.studente.is_rappr_istituto and not request.user.is_superuser:
@@ -88,6 +90,8 @@ def post_detail(request, slug = None):
 
 @login_required(login_url = '/login/')
 def post_list(request):
+	if not request.user.studente.is_attivato:
+		return redirect("/login/")
 	today = timezone.now().date()
 	queryset_list = Post.objects.active()  # .order_by("-timestamp")
 	if request.user.studente.is_rappr_istituto or request.user.is_superuser:

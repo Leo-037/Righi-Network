@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+<html>
+<head>
+    <link rel="icon" href="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+          rel="stylesheet" type="text/css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/sticky-footer.css' %}" rel="stylesheet">
+</head>
+<body>
+
+<div class="row">
+    <div class='col-sm-6 col-sm-offset-3'>
+        <h1 class="text-primary">Reset Password</h1>
+        <hr/>
+        {% if invalid %}{% url "password_reset_recover" as recovery_url %}
+		<h4>{% blocktrans %}Questo link di reset password è invalido. puoi ancora <a href="{{ recovery_url }}">richiederne un altro</a>.{% endblocktrans %}</h4>
+		{% else %}
+		<h4>{% blocktrans %}Ciao, <strong>{{ username }}</strong>. Inserisci la tua nuova password.{% endblocktrans %}</h4>
+		<form method="post" action='{% url "password_reset_reset" token %}'>
+			{% csrf_token %}
+			{{ form|crispy }}
+			<input type="submit" class="btn btn-primary" value='{% trans "Imposta password" %}'>
+		</form>
+	{% endif %}
+    </div>
+</div>
+</body>
+</html>

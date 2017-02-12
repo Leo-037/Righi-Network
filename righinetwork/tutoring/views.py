@@ -12,6 +12,8 @@ from .models import *
 
 @login_required(login_url = '/login/')
 def list_tutors(request):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	title = "Tutoring"
 	if request.user.studente.classe == 1:
 		tutori_approvati = Tutor.objects.filter(approvato = True, prima = True).exclude(
@@ -51,6 +53,8 @@ def list_tutors(request):
 
 @login_required(login_url = '/login/')
 def tutor_form_view(request):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	title = "Proponi tutoring"
 	form = TutorForm(request.POST or None)
 
@@ -108,6 +112,8 @@ def elimina_tutor(request, id_tutor):
 
 @login_required(login_url = '/login/')
 def richiedi_tutor(request, id_tutor):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	tutor = Tutor.objects.get(id = id_tutor)
 	studente = request.user.studente
 	if len(Allievo.objects.filter(tutor = tutor, studente = studente)) > 0:
@@ -119,7 +125,7 @@ def richiedi_tutor(request, id_tutor):
 		send_mail('Tutoring',
 		          """L'alunno {0} di classe {1}^{2} ha chiesto il tutoring in {3}. \nPer contattarlo, questo è il suo indirizzo email: {4}""".format(
 			          studente.nome + " " + studente.cognome, str(studente.classe), studente.sezione, tutor.materia,
-			          studente.user.email), 'RighiNetwork <noreply.righinetwork@gmail.com>',
+			          studente.user.email), 'RighiNetwork <noreply@righi-network.com>',
 		          [tutor.studente.user.email])
 
 		return HttpResponseRedirect("/tutoring/")

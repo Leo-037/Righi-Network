@@ -1,6 +1,7 @@
 body 
 { 
-	background-color: White;
+	background-color: #272b30;
+
 }
 
 .wmd-panel
@@ -26,8 +27,7 @@ body
 }
 
 .wmd-preview 
-{ 
-	background-color: #c0e0ff; 
+{
 }
 
 .wmd-button-row 

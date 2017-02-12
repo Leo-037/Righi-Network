@@ -1,0 +1,9 @@
+{% load i18n %}{% blocktrans %}Caro {{ username }},{% endblocktrans %}
+
+{% blocktrans with domain=site.domain %}E' stato richiesto un reset password su {{ domain }}.{% endblocktrans %}
+
+{% trans "Puoi inserire la tua nuova password seguendo questo link:" %}
+
+http{% if secure %}s{% endif %}://{{ site.domain }}{% url "password_reset_reset" token %}
+
+{% trans "Se non vuoi cambiare password, ignora semplicemente questa email e rimarrà invariata." %}

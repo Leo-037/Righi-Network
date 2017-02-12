@@ -86,12 +86,13 @@ def create_gruppo_view(request, id_turno):
 
 @login_required(login_url = '/login/')
 def assemblee_view(request):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	title = "Assemblee"
 	today = time.strftime("%Y-%m-%d")
 	assemblee_correnti = Assemblea.objects.filter(mostra_assemblea__lte = today,
-	                                              nascondi_assemblea__gt = today).order_by("-data_assemblea", "-id")
-	assemblee_vecchie = Assemblea.objects.filter(mostra_assemblea__lte = today,
-	                                             nascondi_assemblea__lte = today).order_by("-data_assemblea")
+	                                              nascondi_assemblea__gte = today).order_by("-data_assemblea", "-id")
+	assemblee_vecchie = Assemblea.objects.filter(nascondi_assemblea__lt = today).order_by("-data_assemblea")
 	assemblee_future = Assemblea.objects.filter(mostra_assemblea__gte = today).order_by("data_assemblea")
 	context = {'assemblee_correnti': assemblee_correnti,
 	           'assemblee_future': assemblee_future,
@@ -102,6 +103,8 @@ def assemblee_view(request):
 
 @login_required(login_url = '/login/')
 def dettagliassemblea_view(request, id_assemblea):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	assemblea = Assemblea.objects.get(pk = id_assemblea)
 	turni = Turno.objects.filter(assemblea = assemblea).order_by("ora")
 	context = {'assemblea': assemblea,
@@ -112,6 +115,8 @@ def dettagliassemblea_view(request, id_assemblea):
 
 @login_required(login_url = '/login/')
 def dettagliturno_view(request, id_turno):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	turno = Turno.objects.get(pk = id_turno)
 	gruppi = Gruppo.objects.filter(turno = turno)
 	gruppo_iscritto = None
@@ -122,7 +127,7 @@ def dettagliturno_view(request, id_turno):
 
 	today = datetime.date.today()
 	assemblea = turno.assemblea
-	if assemblea.mostra_assemblea < today < assemblea.nascondi_assemblea or assemblea.data_assemblea >= today - 1:
+	if assemblea.mostra_assemblea < today < assemblea.nascondi_assemblea or assemblea.data_assemblea >= today - datetime.timedelta(days=1):
 		mostra_iscrizione = False
 	else:
 		mostra_iscrizione = True
@@ -247,6 +252,8 @@ def delete_gruppo_view(request, id_gruppo):
 
 @login_required(login_url = '/login/')
 def iscritti_view(request, id_gruppo):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	title = "Iscritti al gruppo"
 	gruppo = Gruppo.objects.get(pk = id_gruppo)
 	iscritti = Iscritto.objects.filter(gruppo = gruppo).order_by("studente__classe", "studente__sezione",
@@ -257,6 +264,8 @@ def iscritti_view(request, id_gruppo):
 
 @login_required(login_url = '/login/')
 def iscrizione_view(request, id_assemblea, id_turno, id_gruppo):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	if request.method == "POST":
 		turno = Turno.objects.filter(id = id_turno)
 		for gruppo in Gruppo.objects.filter(turno = turno):
@@ -279,6 +288,8 @@ def iscrizione_view(request, id_assemblea, id_turno, id_gruppo):
 
 @login_required(login_url = '/login/')
 def disiscrizione_view(request, id_assemblea, id_turno, id_gruppo):
+	if not request.user.studente.is_attivato:
+		raise Http404
 	if request.method == "POST":
 		gruppo = Gruppo.objects.get(pk = id_gruppo)
 		iscritto = Iscritto.objects.get(studente = request.user.studente, gruppo = gruppo)

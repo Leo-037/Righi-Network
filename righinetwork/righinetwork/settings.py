@@ -10,9 +10,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = private_settings.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['52.57.142.73', ' 127.0.0.1']
+DEBUG = False
+ALLOWED_HOSTS = ['139.59.139.209','righi-network.com', 'www.righi-network.com', '127.0.0.1']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
@@ -23,12 +22,8 @@ INSTALLED_APPS = [
 	'django.contrib.contenttypes',
 	'django.contrib.sessions',
 	'django.contrib.messages',
-	# 'django.contrib.sites',
 	'django.contrib.staticfiles',
 
-	# 'allauth',
-	# 'allauth.account',
-	# 'allauth.socialaccount',
 	'bootstrap_themes',
 	'crispy_forms',
 	'django_bootstrap_breadcrumbs',
@@ -41,6 +36,7 @@ INSTALLED_APPS = [
 	'assemblee',
 	'bilancio',
 	'comments',
+	'password_reset',
 	'posts',
 	'recuperi',
 	'times',
@@ -85,6 +81,7 @@ TEMPLATES = [
 	},
 ]
 
+CRISPY_FAIL_SILENTLY = not DEBUG
 # AUTHENTICATION_BACKENDS = (
 # 	# Needed to login by username in Django admin, regardless of `allauth`
 # 	'django.contrib.auth.backends.ModelBackend',
@@ -125,14 +122,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'noreply.righinetwork@gmail.com'
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST_USER = 'noreply@righi-network.com'
 EMAIL_HOST_PASSWORD = private_settings.EMAIL_HOST_PASSWORD
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'noreply@righi-network.com'
 
 LANGUAGE_CODE = 'it'
 TIME_ZONE = 'UTC'
@@ -147,7 +144,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
 	os.path.join(BASE_DIR, "static"),
-	'/home/ubuntu/righinetwork/righinetwork/static/',
+	# '/home/leo/righinetwork/righinetwork/static/',
 ]
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")

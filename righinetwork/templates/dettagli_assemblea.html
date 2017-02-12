@@ -24,9 +24,9 @@ Assemblea {{ assemblea.data_assemblea }}
         <div class="btn-group btn-group-justified" role="group">
             <a href="{{ BASE_DIR }}/assemblee/aggiungi_turno/{{ assemblea.id }}/1/" class="btn btn-primary btn-block" role="button">Aggiungi turno</a>
             <a href="update/" class="btn btn-warning btn-block" role="button">Modifica assemblea</a>
-            <a href="delete/" class="btn btn-danger btn-block" role="button">Elimina assemblea</a>
-        </div>
-        <hr>
+            <a href="delete/" class="btn btn-danger btn-block confirm-delete" role="button">Elimina assemblea</a>
+</div>
+ <hr>
         {% endif %}
         {% for turno in turni %}
             <div class="col-md-12">
@@ -39,3 +39,5 @@ Assemblea {{ assemblea.data_assemblea }}
     </div>
 </div>
 {% endblock content %}
+
+<!--onclick="return confirm('Are you sure you want to delete this?')"-->
