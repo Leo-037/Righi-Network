@@ -167,10 +167,15 @@ class GruppoModelAdmin(admin.ModelAdmin):
 
 
 class IscrittoModelAdmin(admin.ModelAdmin):
-	list_display = ["mostra_studente", "mostra_gruppo", "turno", "settimana"]
+	list_display = ["mostra_studente", "mostra_gruppo", "turno", "giorno", "settimana"]
+	list_search = ["studente__nome", "studente__cognome", "studente__user__username"]
+	search_fields = ["studente__nome", "studente__cognome", "studente__user__username"]
 
 	def mostra_studente(self, obj):
 		return str(obj.studente.user.username)
+
+	def giorno(self, obj):
+		return str(obj.gruppo.turno.giorno.nome)
 
 	def mostra_gruppo(self, obj):
 		return str(obj.gruppo.titolo)
