@@ -5,4 +5,4 @@ Creato in python utilizzando <a href="https://www.djangoproject.com/">Django</a>
 
 
 
-Latest release: 02/12/2017
+Latest release: 21/12/2017
