@@ -19,7 +19,7 @@ markdown2==2.3.2
 oauthlib==2.0.1
 olefile==0.44
 phonenumberslite==8.0.0
-Pillow==4.0.0
+Pillow==8.1.1
 prettytable==0.7.2
 python3-openid==3.0.10
 pytz==2016.10
