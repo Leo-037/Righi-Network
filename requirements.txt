@@ -15,7 +15,7 @@ django-pagedown==0.1.1
 django-phonenumber-field==1.1.0
 django-smtp-ssl==1.0
 django-tables2==1.2.9
-markdown2==2.3.2
+markdown2==2.4.0
 oauthlib==2.0.1
 olefile==0.44
 phonenumberslite==8.0.0
